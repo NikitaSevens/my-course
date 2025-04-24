@@ -1,0 +1,53 @@
+// src/pages/Auth/Login.tsx
+import { useState } from 'react';
+import styles from './Login.module.css';
+
+const Login = () => {
+  const [form, setForm] = useState({ username: '', password: '' });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: тут будет логика входа
+    console.log('Login data:', form);
+  };
+
+  return (
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h2 className={styles.title}>Вход в личный кабинет</h2>
+
+        <label className={styles.field}>
+          <span>Логин</span>
+          <input
+            type="text"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <label className={styles.field}>
+          <span>Пароль</span>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <button type="submit" className={styles.submit}>
+          Войти
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;

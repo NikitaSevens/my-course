@@ -1,0 +1,12 @@
+/* src/components/DashboardLayout/DashboardLayout.module.css */
+.container {
+  display: flex;
+  height: 100vh;
+}
+.main {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  overflow: hidden;
+}

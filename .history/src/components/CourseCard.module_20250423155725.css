@@ -1,0 +1,9 @@
+/* src/components/CourseCard.module.css */
+.card {
+  min-width: 200px;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 10px;
+  scroll-snap-align: start;
+  background: #fff;
+}
