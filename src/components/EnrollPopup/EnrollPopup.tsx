@@ -350,7 +350,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   
     // Отправляем на сервер
     try {
-      const response = await fetch("http://localhost:5000/send-doc", {
+      const response = await fetch("https://mycourse-backend.onrender.com/send-doc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
