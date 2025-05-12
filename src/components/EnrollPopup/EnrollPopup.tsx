@@ -350,7 +350,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   
     // Отправляем на сервер
     try {
-      const response = await fetch("https://render.com/docs/web-services#port-binding/send-doc", {
+      const response = await fetch("https://my-course-npdu.onrender.com/send-doc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
