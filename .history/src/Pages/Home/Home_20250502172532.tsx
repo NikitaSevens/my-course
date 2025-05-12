@@ -1,0 +1,124 @@
+import styles from "./Home.module.css";
+import { useState } from "react";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import CourseList from "../../components/CourseList/CourseList";
+import EnrollPopup from "../../components/EnrollPopup/EnrollPopup";
+import { Course } from "../../components/CourseCard/CourseCard";
+
+const Home = () => {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+  const handleOpenPopup = (course?: Course) => {
+    setSelectedCourse(course || null);
+    setPopupOpen(true);
+  };
+
+  return (
+    <>
+      <main className={styles.main}>
+        {/* Hero Section */}
+        <section id="hero" className={styles.hero}>
+          <div className={styles.cloudBackground}>
+            <div className={styles.heroContent}>
+              <Header />
+              <img
+                className={styles.heroImg}
+                src="src/assets/copp.svg"
+                alt=""
+              />
+              <h1>ВЫБЕРИ СВОЙ КУРС</h1>
+              <p>
+                Мы создаём творческую среду,
+                <br /> где дети могут раскрыть свои таланты
+              </p>
+              <div className={styles.buttons}>
+                <button
+                  className={styles.button}
+                  onClick={() => handleOpenPopup()}
+                >
+                  Записаться
+                </button>
+              </div>
+              <div className={styles.floatingTags}>
+                <span style={{ top: "-200px", left: "5%", fontSize: "1.3vw" }}>
+                  #рисование
+                </span>
+                <span style={{ top: "5px", left: "12%", fontSize: "1.3vw" }}>
+                  #UI/UX
+                </span>
+                <span style={{ top: "-70px", left: "23%", fontSize: "1.3vw" }}>
+                  #Frontend
+                </span>
+                <span style={{ top: "-180px", right: "6%", fontSize: "1.3vw" }}>
+                  #группы
+                </span>
+                <span style={{ top: "-60px", right: "18%", fontSize: "1.3vw" }}>
+                  #образование
+                </span>
+                <span style={{ top: "13px", right: "4%", fontSize: "1.3vw" }}>
+                  #обучение
+                </span>
+              </div>
+            </div>
+            <div className={styles.reasons}>
+              <div className={styles.reasonItem}>
+                <h2>
+                  <strong>Why choose</strong> <br /> Artistry?
+                </h2>
+                <p className={styles.reasonP}>
+                  Our students are chosen to study in our children's school
+                  because of the high quality of education
+                </p>
+              </div>
+              <div className={styles.reasonItem}>
+                <img src="src/assets/star.png" alt="Full Development" />
+                <h3>Full Development</h3>
+                <p>
+                  We believe that learning should contribute to the full
+                  development of each child.
+                </p>
+              </div>
+              <div className={styles.reasonItem}>
+                <img src="src/assets/starss.png" alt="Love Children" />
+                <h3>Love Children</h3>
+                <p>
+                  Our teachers and staff are always ready to give children
+                  warmth
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className={styles.courses}>
+          <h2>О нас</h2>
+          
+        </section>
+
+        {/* Placeholder Program Section */}
+        <section id="programs" className={styles.courses}>
+          <h2>Программы</h2>
+          <CourseList onCourseClick={handleOpenPopup} />
+          
+        </section>
+
+        {/* Contact якорь (для футера или кнопки) */}
+        <section>
+          <Footer />
+        </section>
+      </main>
+
+      {popupOpen && (
+        <EnrollPopup
+          onClose={() => setPopupOpen(false)}
+          selectedCourse={selectedCourse}
+        />
+      )}
+    </>
+  );
+};
+
+export default Home;

@@ -1,0 +1,95 @@
+.main {
+  padding: 0;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  background: linear-gradient(to bottom, #558cfd, #ffffff);
+  padding: 80px 32px 100px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.cloudBackground {
+  background-image: url('src/assets/cloud.png'); /* или реальная картинка облаков */
+  background-size: cover;
+  background-position: center;
+  padding: 60px 20px;
+  border-radius: 20px;
+  w100
+
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  color: #000;
+}
+
+.heroContent h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.heroContent p {
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.cta {
+  padding: 12px 28px;
+  font-size: 16px;
+  background: linear-gradient(to right, #6a8bff, #87d3ff);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.secondary {
+  background: none;
+  border: 2px solid #558cfd;
+  color: #6a8bff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tags span {
+  background: white;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}
+
+/* Courses Section */
+.courses {
+  padding: 64px 32px;
+  background: white;
+}
+
+.courses h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+}

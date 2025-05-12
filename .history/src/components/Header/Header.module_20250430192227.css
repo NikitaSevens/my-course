@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #fff, #d3e0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.navLink:hover {
+  opacity: 0.7;
+}
+
+.contactBtn {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  margin-right: 70px;
+}
+
+.contactBtn:hover {
+  background: #f1f1f1;
+}

@@ -1,0 +1,20 @@
+/* src/styles/ahunter.css */
+
+.ahunter-suggest-wrapper {
+  border: 1px solid #ccc;
+  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10000;
+  position: absolute;
+  font-size: 14px;
+}
+
+.ahunter-suggest-row {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.ahunter-suggest-row:hover {
+  background-color: #f0f0f0;
+}

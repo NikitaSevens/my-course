@@ -1,0 +1,104 @@
+/* EnrollPopup.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 32px 40px;
+  width: 100%;
+  max-width: 1020px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.scrollOne{
+  display: flex;
+  flex-direction: column;
+  w
+}
+.scrollTwo{
+display: flex;
+flex-direction: column;
+
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #444;
+}
+
+input,
+select {
+  margin-top: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #0077ff;
+  outline: none;
+  background: #fff;
+}
+
+.submitBtn {
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 15px;
+  background-color: #0077ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: #005fcc;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: #333;
+}

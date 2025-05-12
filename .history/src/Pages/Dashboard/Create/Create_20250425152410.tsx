@@ -1,0 +1,10 @@
+// src/pages/Admin/CreatePage.tsx
+//import Sidebar from '../../../components/Sidebar/Sidebar';
+import React from 'react';
+import {handleView} from '../../../components/CreateCourse/CreateCourse';
+
+const CreatePage: React.FC = () => {
+  return  <> <CreateCourse /></>;
+};
+
+export default CreatePage;

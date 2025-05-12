@@ -1,0 +1,64 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #fff, #d3e0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tabContainer {
+  display: flex;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 6px;
+  gap: 6px;
+}
+
+.tab {
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.tab:hover {
+  background: rgb(255, 255, 255);
+  color: #000;
+}
+
+.activeTab {
+  background: white;
+  color: black;
+}
+
+.contactBtn {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  margin-left: 72px;
+}
+
+.contactBtn:hover {
+  background: #f1f1f1;
+}

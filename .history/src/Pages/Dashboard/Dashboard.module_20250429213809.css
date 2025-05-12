@@ -1,0 +1,15 @@
+.wrapper {
+  display: 'flex';
+  gap: '24px';
+}
+
+.container{
+  flex: 2;
+  display: 'flex';
+  flex-direction: column;
+  gap: '16px';
+}
+
+.title {
+  align-items: ;
+}
