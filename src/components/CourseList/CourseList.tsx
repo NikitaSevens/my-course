@@ -1,5 +1,5 @@
 // src/components/CourseList/CourseList.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CourseCard, { Course } from '../CourseCard/CourseCard';
 
 const CourseList = ({ onCourseClick }: { onCourseClick: (course: Course) => void }) => {
