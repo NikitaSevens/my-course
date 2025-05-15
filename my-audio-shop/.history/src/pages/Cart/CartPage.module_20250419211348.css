@@ -1,0 +1,139 @@
+.container {
+  padding: 24px 32px;
+
+  max-width: 1110px;
+  margin: 80px auto 0 auto;
+  margin-top: 67px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column; 
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.products {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 2;
+
+  max-height: 920px; /* или подгони под свою вёрстку */
+  overflow-y: auto;
+  padding-right: 8px; /* чтобы скролл не налезал на контент */
+
+  /* необязательно, но можно для красоты */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ffffff transparent; /* Firefox */
+}
+
+.products::-webkit-scrollbar {
+  width: 6px;
+}
+.products::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+.products::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card {
+  display: flex;
+  max-width: 610px;
+  max-height: 186px;
+  height: 218px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+  border-radius: 30px;
+  padding: 16px;
+  background: white;
+  align-items: center;
+  gap: 16px;
+}
+
+.image {
+  width: 146px;
+  height: auto;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-direction: column;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.controls button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #FFA542;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.right {
+  text-align: right;
+}
+
+.delete {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.summary {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 240px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: fit-content;
+}
+
+.checkout {
+  background: black;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.info h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+.info p {
+  margin: 12px 0 0 0 ;
+  font-size: 15px;
+  font-weight: 500;
+  color: #aaaaaa;
+
+}

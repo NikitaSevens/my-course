@@ -1,0 +1,39 @@
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.card:hover {
+  background: black;
+  color: white;
+}
+
+.buyButton{
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card:hover .buyButton {
+  background: white;
+  color:black;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  color: ;
+}
+
+.old {
+  text-decoration: line-through;
+  color: #FFCE7F;
+}

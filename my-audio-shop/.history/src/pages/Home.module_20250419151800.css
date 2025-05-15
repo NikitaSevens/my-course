@@ -1,0 +1,7 @@
+.container {
+  max-width: 1200px; /* или 1100px, как тебе удобнее */
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column; /* если контент идет столбиком */
+}

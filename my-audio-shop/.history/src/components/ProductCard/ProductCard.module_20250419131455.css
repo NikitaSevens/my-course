@@ -1,0 +1,76 @@
+.card {
+  width: 350px;
+  height: 407px;
+  background: white;
+  color: #1C1C27;
+  border-radius: 30px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.card img {
+  max-height: 200px;
+  object-fit: contain;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buyButton:hover {
+  background: black;
+  color: white;
+}
+
+
+
+.buyButton{
+  padding: 0.5rem 1rem;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+
+.priceRow {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #FFA542;
+  font-weight: 600;
+}
+
+.priceRow span:nth-child(2) {
+  
+}
+.info {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-right: 101px;
+}
+
+.info h3 {
+  width: fit-content;
+  margin: 0;
+}
+
+
+.old {
+  text-decoration: line-through;
+  color: #FFCE7F;
+}
+
+.rating {
+  display: flex;
+  color: #838383;
+  width: fit-content;
+}

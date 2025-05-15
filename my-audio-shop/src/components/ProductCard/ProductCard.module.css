@@ -1,0 +1,101 @@
+.card {
+  width: 350px;
+  height: 407px;
+  background: white;
+  color: #1C1C27;
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+.productImage {
+  max-height: 200px;
+  object-fit: contain;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  margin-top: 30px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 22px 32px 22px;
+}
+
+.buyButton:hover {
+  background: rgb(0, 0, 0);
+  color: white;
+}
+
+
+
+.buyButton{
+  padding: 0.5rem 1rem;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  border: none;
+  font-weight: 600;
+  font-size: 17px;
+  font-family: "Montserrat", sans-serif;
+}
+
+
+.priceRow {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #FFA542;
+  font-weight: 600;
+  align-items: center;
+  font-size: 17px;
+}
+
+
+.info {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between;
+  margin-right: 44px;
+}
+
+.info h3 {
+  width: fit-content;
+  margin: 0;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+
+.old {
+  text-decoration: line-through;
+  color: #FFCE7F;
+  font-size: 13px;
+
+}
+.price__old {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rating {
+  display: flex;
+  color: #838383;
+  width: fit-content;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 17px;
+}
+
+.priceRowCompact {
+  gap: 5px; /* например, если есть старая цена */
+}

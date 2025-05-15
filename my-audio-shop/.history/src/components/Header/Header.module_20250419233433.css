@@ -1,0 +1,80 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0); /* прозрачный */
+  backdrop-filter: blur(20px); 
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/*  .scrolled {}  */
+
+/* остальная часть оставляется без изменений */
+
+.icons {
+  display: flex;
+  gap: 45px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  color: black;
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: #4e4e4e;
+}
+
+.nav {
+  display: flex;
+  gap: 25px;
+
+}
+.iconWrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+
+}
+
+.iconImage {
+
+  width: 100%;
+  height: auto;
+  display: block;
+
+}
+.iconWrapper:hover .iconImage {
+  filter: brightness(0) saturate(100%) invert(47%) sepia(94%) saturate(1708%) hue-rotate(359deg) brightness(101%) contrast(101%);
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -9px;
+  background-color: #FFA542;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  line-height: 1;
+}

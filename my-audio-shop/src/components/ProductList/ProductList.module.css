@@ -1,0 +1,14 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+
+}
+
+.categoryTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 28px 0 24px;
+  color: #838383;
+}

@@ -1,0 +1,83 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: white;
+  padding: 24px 32px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 20px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.logo:hover {
+  color: #494949;
+}
+
+.links {
+  display: flex;
+  gap: 172px;
+
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+.column a {
+  text-decoration: none;
+  color: black;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.languageSwitch {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-top: 28px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.globe {
+  font-size: 16px;
+}
+
+.active {
+  color: #FFA542;
+  font-weight: 600;
+}
+
+.socials {
+  display: flex;
+  gap: 18px;
+}
+
+.iconWrapper:hover .icon{
+  filter: brightness(0) saturate(100%) invert(47%) sepia(94%) saturate(1708%) hue-rotate(359deg) brightness(101%) contrast(101%);
+}
+
+.iconWrapper:hover a{
+  filter: brightness(0) saturate(100%) invert(47%) sepia(94%) saturate(1708%) hue-rotate(359deg) brightness(101%) contrast(101%);
+}
+
+.iconWrapper:hover span{
+  filter: brightness(0) saturate(100%) invert(47%) sepia(94%) saturate(1708%) hue-rotate(359deg) brightness(101%) contrast(101%);
+}
+
+
+
+.icon {
+  width: 30px;
+  height: 30px;
+
+}

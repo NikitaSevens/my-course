@@ -1,0 +1,65 @@
+.header {
+  position: fixed; /* Закрепляем хедер */
+  top: 0;           /* Приклеиваем к верхней части */
+  left: 0;
+  right: 0;
+  z-index: 1000;    /* Делаем его поверх остальных элементов */
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0px;
+  background: rgba(255, 255, 255, 0.048); /* Полупрозрачный фон */
+  backdrop-filter: blur(10px); /* Эффект блюра */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для выделения */
+}
+.icons {
+  display: flex;
+  gap: 45px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  color: black;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 25px;
+
+}
+.iconWrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.iconImage {
+
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -9px;
+  background-color: #FFA542;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  line-height: 1;
+}

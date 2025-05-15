@@ -1,0 +1,58 @@
+.card {
+  background: white;
+  padding: 1rem;
+  color: #1C1C27;
+  border-radius: 30px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+
+
+  width: 350px;
+  height: 407px;
+}
+
+.buyButton:hover {
+  background: black;
+  color: white;
+}
+
+
+
+.buyButton{
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: .5px solid black;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+
+}
+
+
+.priceRow {
+  display: inline;
+  justify-content: center;
+  gap: 8px;
+  color: #FFA542;
+  font-weight: 600;
+}
+.info {
+  display: inline-block;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info h3 {
+  width: fit-content;
+}
+
+
+.old {
+  text-decoration: line-through;
+  color: #FFCE7F;
+}
+
+.rating {
+  color: #838383;
+  width: fit-content;
+}
