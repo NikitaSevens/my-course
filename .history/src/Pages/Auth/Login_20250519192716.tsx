@@ -31,7 +31,7 @@ const Login = () => {
         <div className={styles.header}>
           <h2 className={styles.title}>Вход в админку</h2>
           <a className={styles.exit} onClick={() => navigate("/")}>
-            <img src={exitIcon} alt="Выход" className={styles.icon} />
+            <img src="src/assets/exit.svg" alt="Выход" className={styles.icon} />
           </a>
         </div>
 

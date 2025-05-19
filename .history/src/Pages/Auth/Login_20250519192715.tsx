@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./Login.module.css";
-import exitIcon from "../../assets/exit.svg";
+
 
 
 const Login = () => {
@@ -31,7 +31,7 @@ const Login = () => {
         <div className={styles.header}>
           <h2 className={styles.title}>Вход в админку</h2>
           <a className={styles.exit} onClick={() => navigate("/")}>
-            <img src={exitIcon} alt="Выход" className={styles.icon} />
+            <img src="src/assets/exit.svg" alt="Выход" className={styles.icon} />
           </a>
         </div>
 
