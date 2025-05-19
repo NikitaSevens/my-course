@@ -25,7 +25,7 @@ const Home = () => {
               <Header />
               <img
                 className={styles.heroImg}
-                src="/images/copp.svg"
+                src="/images/.svg"
                 alt=""
               />
               <h1>ВЫБЕРИ СВОЙ КУРС</h1>
