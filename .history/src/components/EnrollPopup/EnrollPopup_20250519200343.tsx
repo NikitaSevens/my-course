@@ -1034,7 +1034,10 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
           </div>
 
         </form>
+
+        <button className={styles.closeBtn} onClick={onClose}>
           <img className={styles.closeBtn} onClick={onClose} src="/images/exit.svg" alt="Закрыть" />
+
       </div>
     </div>
   );

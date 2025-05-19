@@ -202,25 +202,8 @@ p {
 @media (max-width: 768px) {
 
 .popup {
-  
+  h600
   padding: 12px 24px;
 
-}
-.scrollOne{
-  gap: 8px;
-
-}
-
-.submitBtn{
-  padding: 8px;
-}
-
-h2{
-  margin-bottom: 5px;
-}
-
-.scrollTwo {
-  gap: 8px;
-  max-height: 536px;
 }
 }

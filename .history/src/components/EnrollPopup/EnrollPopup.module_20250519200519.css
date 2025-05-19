@@ -98,9 +98,9 @@ select:focus {
 .closeBtn {
   position: absolute;
   width: 30px;
-  height: 30px;
-  top: 20px;
-  right: 20px;
+  height: 20px;
+  top: 40px;
+  right: 40px;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -202,25 +202,8 @@ p {
 @media (max-width: 768px) {
 
 .popup {
-  
+
   padding: 12px 24px;
 
-}
-.scrollOne{
-  gap: 8px;
-
-}
-
-.submitBtn{
-  padding: 8px;
-}
-
-h2{
-  margin-bottom: 5px;
-}
-
-.scrollTwo {
-  gap: 8px;
-  max-height: 536px;
 }
 }

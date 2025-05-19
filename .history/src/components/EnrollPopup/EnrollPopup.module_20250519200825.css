@@ -210,17 +210,4 @@ p {
   gap: 8px;
 
 }
-
-.submitBtn{
-  padding: 8px;
-}
-
-h2{
-  margin-bottom: 5px;
-}
-
-.scrollTwo {
-  gap: 8px;
-  max-height: 536px;
-}
 }
