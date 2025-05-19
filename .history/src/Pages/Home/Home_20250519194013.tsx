@@ -81,7 +81,7 @@ const Home = () => {
                 </p>
               </div>
               <div className={styles.reasonItem}>
-                <img src="/images/starss.svg" alt="Love Children" />
+                <img src="/images/exit.svg" alt="Love Children" />
                 <h3>Love Children</h3>
                 <p>
                   Our teachers and staff are always ready <br /> to give children

@@ -73,7 +73,7 @@ const Home = () => {
                 </p>
               </div>
               <div className={styles.reasonItem}>
-                <img src="/images/star.svg" alt="Full Development" />
+                <img src="/images/exit.svg" alt="Full Development" />
                 <h3>Full Development</h3>
                 <p>
                   We believe that learning should contribute <br /> to the full
@@ -81,7 +81,7 @@ const Home = () => {
                 </p>
               </div>
               <div className={styles.reasonItem}>
-                <img src="/images/starss.svg" alt="Love Children" />
+                <img src="src/assets/starss.png" alt="Love Children" />
                 <h3>Love Children</h3>
                 <p>
                   Our teachers and staff are always ready <br /> to give children
