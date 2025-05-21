@@ -69,7 +69,7 @@ const [preview, setPreview] = useState<string | null>(null);
 
   const courseData = new FormData();
 
-
+  // Добавляем все текстовые поля, кроме programFile и image (их отдельно)
   Object.entries(form).forEach(([key, value]) => {
     if (key !== "programFile" && key !== "image" && value) {
       courseData.append(key, value as string);

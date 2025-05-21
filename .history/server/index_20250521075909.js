@@ -40,50 +40,39 @@ const upload = multer({ storage });
 const coursesFile = path.join(dataDir, "courses.json");
 
 // === 5. СОЗДАНИЕ КУРСА ===
-app.post(
-  "/courses",
-  upload.fields([
-    { name: "imageFile", maxCount: 1 },
-    { name: "programFile", maxCount: 1 },
-  ]),
-  (req, res) => {
-    try {
-      const data = req.body;
-      const files = req.files;
+app.post("/courses", upload.fields([
+  { name: "imageFile", maxCount: 1 },
+  { name: "programFile", maxCount: 1 }
+]), (req, res) => {
+  try {
+    const data = req.body;
+    const files = req.files;
 
-      const newCourse = {
-        id: uuidv4(),
-        ...data,
-        image:
-          data.image ||
-          (files?.imageFile?.[0]?.filename
-            ? `/uploads/${files.imageFile[0].filename}`
-            : ""),
-        programFile: files?.programFile?.[0]?.filename
-          ? `/uploads/${files.programFile[0].filename}`
-          : "",
-      };
+    const newCourse = {
+      id: uuidv4(),
+      ...data,
+      
+    };
 
-      let courses = [];
-      if (fs.existsSync(coursesFile)) {
-        try {
-          courses = JSON.parse(fs.readFileSync(coursesFile, "utf-8"));
-        } catch (e) {
-          console.error("Ошибка чтения JSON:", e);
-          courses = [];
-        }
+    let courses = [];
+    if (fs.existsSync(coursesFile)) {
+      try {
+        courses = JSON.parse(fs.readFileSync(coursesFile, "utf-8"));
+      } catch (e) {
+        console.error("Ошибка чтения JSON:", e);
+        courses = [];
       }
-
-      courses.push(newCourse);
-      fs.writeFileSync(coursesFile, JSON.stringify(courses, null, 2));
-
-      res.status(201).json({ message: "Курс создан", course: newCourse });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Ошибка при создании курса" });
     }
+
+    courses.push(newCourse);
+    fs.writeFileSync(coursesFile, JSON.stringify(courses, null, 2));
+
+    res.status(201).json({ message: "Курс создан", course: newCourse });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка при создании курса" });
   }
-);
+});
 
 // === 6. ПОЛУЧИТЬ ВСЕ КУРСЫ ===
 app.get("/courses", (req, res) => {
@@ -101,7 +90,7 @@ app.get("/courses/:id", (req, res) => {
   const { id } = req.params;
   try {
     const courses = JSON.parse(fs.readFileSync(coursesFile, "utf-8"));
-    const course = courses.find((c) => c.id === id);
+    const course = courses.find(c => c.id === id);
     if (!course) return res.status(404).json({ error: "Курс не найден" });
     res.json(course);
   } catch (err) {
@@ -111,6 +100,7 @@ app.get("/courses/:id", (req, res) => {
 
 // === 8. СТАТИЧЕСКИЕ ФАЙЛЫ (изображения и т.д.) ===
 app.use("/uploads", express.static(uploadsDir));
+
 
 // === 9. ФУНКЦИЯ ОТПРАВКИ ДОКУМЕНТА ===
 app.post("/send-doc", async (req, res) => {
@@ -148,3 +138,4 @@ app.post("/send-doc", async (req, res) => {
 // === 10. СТАРТ СЕРВЕРА ===
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+

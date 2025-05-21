@@ -60,57 +60,49 @@ const [preview, setPreview] = useState<string | null>(null);
 
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!form.title || !form.startDate || !form.endDate) {
-    setError("Пожалуйста, заполните обязательные поля");
-    return;
-  }
-
-  const courseData = new FormData();
-
-
-  Object.entries(form).forEach(([key, value]) => {
-    if (key !== "programFile" && key !== "image" && value) {
-      courseData.append(key, value as string);
+    // Валидация, можно дополнить
+    if (!form.title || !form.startDate || !form.endDate) {
+      setError("Пожалуйста, заполните обязательные поля");
+      return;
     }
-  });
 
-  if (imageFile) {
-    courseData.append("imageFile", imageFile);
-  } else if (image) {
-    courseData.append("image", image);
-  }
-
-  if (form.programFile) {
-    courseData.append("programFile", form.programFile);
-  }
-
-  fetch(`${apiUrl}/courses`, {
-    method: "POST",
-    body: courseData,
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Ошибка при отправке");
+    const courseData = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if (value) {
+        courseData.append(key, value as string | Blob);
       }
-      return res.json();
-    })
-    .then((data) => {
-      alert("Курс успешно добавлен!");
-      setForm(initialForm);
-      setImageFile(null);
-      setPreview(null);
-      setImage("");
-      setError("");
-    })
-    .catch((err) => {
-      console.error(err);
-      setError(err.message);
     });
-};
+    
+    if (imageFile) {
+  courseData.append('image', imageFile);
+} else if (image) {
+  courseData.append('image', image); // строка URL
+}
+  fetch(`${apiUrl}/courses`, {
+  method: "POST",
+  body: courseData
+})
+.then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || "Ошибка при отправке");
+  }
+  return res.json();
+})
+.then(data => {
+  console.log("Курс успешно отправлен:", data);
+  alert("Курс успешно добавлен!");
+  setForm({ title: "", startDate: "", endDate: "", description: "", image: "", durationHours: "", durationLessons: "", programType: "", studyForm: "", price: "", competence: "", direction: "", programFile: null, organization: "", city: "", audience: ""}); // Очисти форму по желанию
+  setImageFile(null);
+})
+.catch(err => {
+  console.error(err);
+  setError(err.message);
+});
 
+  };
 
   return (
     <div className={styles.container}>
