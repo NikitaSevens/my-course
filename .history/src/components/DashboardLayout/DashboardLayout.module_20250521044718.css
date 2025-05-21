@@ -1,0 +1,13 @@
+/* src/components/DashboardLayout/DashboardLayout.module.css */
+.container {
+  display: flex;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+.main {
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+
+}
