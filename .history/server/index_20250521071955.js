@@ -102,7 +102,9 @@ app.get("/courses/:id", (req, res) => {
 // === 8. СТАТИЧЕСКИЕ ФАЙЛЫ (изображения и т.д.) ===
 app.use("/uploads", express.static(uploadsDir));
 
-
+app.get("/", (req, res) => {
+  res.send("API работает!"); // или отправь файл, или сделай редирект
+});
 // === 9. ФУНКЦИЯ ОТПРАВКИ ДОКУМЕНТА ===
 app.post("/send-doc", async (req, res) => {
   try {
