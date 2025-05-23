@@ -1,2 +1,2 @@
-echo ".history" >> .gitignore
-echo ".env" >> .gitignore
+.history/
+.env

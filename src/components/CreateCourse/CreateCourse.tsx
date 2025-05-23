@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./CreateCourse.module.css";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl =  "https://my-course-npdu.onrender.com" ;
 
 const initialForm = {
   title: "",
