@@ -173,3 +173,10 @@ app.post("/send-doc", async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+
+// === Отдача фронтенда ===
+app.use(express.static(path.join(__dirname, "../client/dist"))); // путь зависит от твоего билда
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
