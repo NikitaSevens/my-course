@@ -1,11 +1,7 @@
 import { useState } from "react";
 import styles from "./CreateCourse.module.css";
 
-
 const apiUrl = import.meta.env.VITE_API_URL;
-
-
-
 
 const initialForm = {
   title: "",
@@ -16,7 +12,7 @@ const initialForm = {
   durationLessons: "",
   programType: "",
   studyForm: "",
-  image: "",
+  image: "", // для ссылки
   price: "",
   competence: "",
   direction: "",
@@ -31,14 +27,12 @@ type FormKeys = keyof typeof initialForm;
 const CreateCourse = () => {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
-  const [image, setImage] = useState('');
-const [imageFile, setImageFile] = useState<File | null>(null);
-const [preview, setPreview] = useState<string | null>(null);
+  const [image, setImage] = useState(""); // ссылка
+  const [imageFile, setImageFile] = useState<File | null>(null); // файл
+  const [preview, setPreview] = useState<string | null>(null); // превью картинки
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name as FormKeys]: value }));
@@ -48,68 +42,86 @@ const [preview, setPreview] = useState<string | null>(null);
     const file = e.target.files?.[0] || null;
     setForm((prev) => ({ ...prev, programFile: file }));
   };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setImageFile(file);
-    setImage(''); // если выбрали файл, очищаем ссылку
-    const fileUrl = URL.createObjectURL(file);
-    setPreview(fileUrl); // обновляем превью
-  }
-};
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setImage(""); // очищаем ссылку, если выбран файл
+      setPreview(URL.createObjectURL(file));
+      
+    }
+  };
 
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!form.title || !form.startDate || !form.endDate) {
-    setError("Пожалуйста, заполните обязательные поля");
-    return;
-  }
-
-  const courseData = new FormData();
-
-
-  Object.entries(form).forEach(([key, value]) => {
-    if (key !== "programFile" && key !== "image" && value) {
-      courseData.append(key, value as string);
+    if (!form.title || !form.startDate || !form.endDate) {
+      setError("Пожалуйста, заполните обязательные поля");
+      return;
     }
-  });
 
-  if (imageFile) {
-    courseData.append("imageFile", imageFile);
-  } else if (image) {
-    courseData.append("image", image);
-  }
+    const courseData = new FormData();
 
-  if (form.programFile) {
-    courseData.append("programFile", form.programFile);
-  }
-
-  fetch(`${apiUrl}/courses`, {
-    method: "POST",
-    body: courseData,
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Ошибка при отправке");
+    // Добавляем обычные поля
+    Object.entries(form).forEach(([key, value]) => {
+      if (key !== "programFile" && key !== "image" && value) {
+        courseData.append(key, value as string);
       }
-      return res.json();
-    })
-    .then((data) => {
-      alert("Курс успешно добавлен!");
-      setForm(initialForm);
-      setImageFile(null);
-      setPreview(null);
-      setImage("");
-      setError("");
-    })
-    .catch((err) => {
-      console.error(err);
-      setError(err.message);
     });
-};
+
+    // Только одно изображение — либо файл, либо ссылка
+    if (imageFile) {
+      courseData.append("imageFile", imageFile);
+    } else if (image) {
+      courseData.append("image", image);
+    }
+
+    // Программа (PDF/DOCX)
+    if (form.programFile) {
+      courseData.append("programFile", form.programFile);
+    }
+
+    // (Опционально) отладка
+    for (let pair of courseData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    fetch(`${apiUrl}/courses`, {
+      method: "POST",
+      body: courseData,
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          // Попытка получить текст ошибки
+          const contentType = res.headers.get("content-type");
+          const errorText = contentType?.includes("application/json")
+            ? (await res.json()).error
+            : await res.text();
+
+          throw new Error(errorText || "Ошибка при отправке");
+        }
+        return res.json();
+        
+      })
+      .then((data) => {
+    console.log("Ответ от сервера:", data);
+  })
+      .then(() => {
+        alert("Курс успешно добавлен!");
+        setForm(initialForm);
+        setImageFile(null);
+        setPreview(null);
+        setImage("");
+        setError("");
+        (e.target as HTMLFormElement).reset(); // сброс файлов
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
+      });
+  };
 
 
   return (

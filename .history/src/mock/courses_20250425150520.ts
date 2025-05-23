@@ -1,1 +1,0 @@
-// src/mock/courses.ts

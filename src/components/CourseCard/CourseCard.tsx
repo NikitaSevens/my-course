@@ -27,6 +27,8 @@ const CourseCard = ({ course }: { course: Course }) => {
   const textRef = useRef<HTMLSpanElement>(null);
   const [shouldScroll, setShouldScroll] = useState(false);
 
+  const imageUrl = course.image || 'https://source.unsplash.com/600x400/?education';
+
   useEffect(() => {
     const wrapperWidth = wrapperRef.current?.offsetWidth || 0;
     const textWidth = textRef.current?.scrollWidth || 0;
@@ -40,7 +42,7 @@ const CourseCard = ({ course }: { course: Course }) => {
     <div className={styles.card}>
       <div className={styles.imageContainer}>
         <img
-          src={course.image || 'https://source.unsplash.com/600x400/?education'}
+          src={imageUrl}
           alt={course.title}
           className={styles.image}
         />
@@ -64,5 +66,6 @@ const CourseCard = ({ course }: { course: Course }) => {
     </div>
   );
 };
+
 
 export default CourseCard;

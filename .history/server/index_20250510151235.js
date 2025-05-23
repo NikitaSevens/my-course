@@ -1,1 +1,0 @@
-generateDocxFromTemplate(data, filePath);

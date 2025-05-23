@@ -17,5 +17,35 @@
     "audience": "Школьники",
     "image": "https://uaomos.news/upload/iblock/e49/e492d194f679a025e0a980bb5e7391a2.jpg",
     "programFile": "C:\\Users\\lokno\\react-project\\my-course\\server\\uploads\\39b18eda-5800-4257-be2d-d7f8a344f3bf.pdf"
+  },
+  {
+    "id": "ad76cecb-9bbf-4b98-8154-d3b3ad39fa6f",
+    "query": "\n    query IntrospectionQuery {\n      __schema {\n        \n        queryType { name }\n        mutationType { name }\n        subscriptionType { name }\n        types {\n          ...FullType\n        }\n        directives {\n          name\n          description\n          \n          locations\n          args {\n            ...InputValue\n          }\n        }\n      }\n    }\n\n    fragment FullType on __Type {\n      kind\n      name\n      description\n      \n      fields(includeDeprecated: true) {\n        name\n        description\n        args {\n          ...InputValue\n        }\n        type {\n          ...TypeRef\n        }\n        isDeprecated\n        deprecationReason\n      }\n      inputFields {\n        ...InputValue\n      }\n      interfaces {\n        ...TypeRef\n      }\n      enumValues(includeDeprecated: true) {\n        name\n        description\n        isDeprecated\n        deprecationReason\n      }\n      possibleTypes {\n        ...TypeRef\n      }\n    }\n\n    fragment InputValue on __InputValue {\n      name\n      description\n      type { ...TypeRef }\n      defaultValue\n      \n      \n    }\n\n    fragment TypeRef on __Type {\n      kind\n      name\n      ofType {\n        kind\n        name\n        ofType {\n          kind\n          name\n          ofType {\n            kind\n            name\n            ofType {\n              kind\n              name\n              ofType {\n                kind\n                name\n                ofType {\n                  kind\n                  name\n                  ofType {\n                    kind\n                    name\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  ",
+    "image": "",
+    "programFile": ""
+  },
+  {
+    "id": "187e92c6-0d7e-467d-96c7-355612fbbd7f",
+    "title": "Мой курс",
+    "description": "лоаджлфыаджываджаджвад",
+    "image": "https://storage.yandexcloud.net/my-course-bucket/5c410929-dc09-455e-ad2a-c0ceb75a38e9.png",
+    "programFile": ""
+  },
+  {
+    "id": "db7cba78-2553-4009-9dc0-3c517fac7985",
+    "title": "Мой курс",
+    "description": "лоаджлфыаджываджаджвад",
+    "image": "https://storage.yandexcloud.net/my-course-bucket/1b6b1131-629d-4952-a1eb-3d117aa52f8f.png",
+    "programFile": ""
+  },
+  {
+    "id": "15599b75-f5a9-4c86-a596-99d87b5c3dfc",
+    "image": "https://storage.yandexcloud.net/my-course-bucket/1838b732-2833-408d-8674-4a815b0dbda6.png",
+    "programFile": ""
+  },
+  {
+    "id": "c8ef2c19-7903-4741-b5fb-527cb352c9d6",
+    "image": "https://storage.yandexcloud.net/my-course-bucket/cf5e0f23-ddbd-4e27-9095-ece3f0377635.png",
+    "programFile": ""
   }
 ]
