@@ -3,6 +3,10 @@ import CourseCard, { Course } from '../CourseCard/CourseCard';
 import styles from './CourseList.module.css';
 
 const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) {
+  console.error("VITE_API_URL не определён!");
+  
+}
 
 const CourseList = ({ onCourseClick }: { onCourseClick: (course: Course) => void }) => {
 console.log("CourseList рендерится");
