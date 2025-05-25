@@ -1,35 +1,61 @@
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./CourseDetail.module.css";
-import  { Course } from '../CourseCard/CourseCard';
+import { Course } from "../CourseCard/CourseCard";
 
 const CourseDetail = ({
   course,
   onClose,
+  onEnroll,
 }: {
   course: Course;
   onClose: () => void;
+  onEnroll: (course: Course) => void;
 }) => {
   return (
     <AnimatePresence>
       <motion.div
         className={styles.overlay}
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 50 }}
-        transition={{ duration: 0.3 }}
+        exit={{ opacity: 0, y: 40 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <div className={styles.card}>
           <button onClick={onClose} className={styles.closeBtn}>×</button>
-          <h2>{course.title}</h2>
-          <p><strong>Описание:</strong> {course.description}</p>
-          <p><strong>Дата начала:</strong> {course.startDate}</p>
-          <p><strong>Дата окончания:</strong> {course.endDate}</p>
-          <p><strong>Цена:</strong> {course.price} ₽</p>
-          <p><strong>Форма обучения:</strong> {course.studyForm}</p>
-          <p><strong>Город:</strong> {course.city}</p>
-          <a href={course.programFile} target="_blank" rel="noopener noreferrer">
-            📄 Скачать программу
-          </a>
+
+          <div className={styles.topSection}>
+            <div className={styles.infoLeft}>
+              <h1 className={styles.title}>{course.title}</h1>
+
+              <ul className={styles.courseMeta}>
+                <li><strong>Для кого:</strong> {course.audience || 'Школьники'}</li>
+                <li><strong>Длительность программы:</strong> {course.durationHours || '144 часа'}</li>
+                <li><strong>Количество занятий:</strong> {course.durationLessons || '38 занятий'}</li>
+                <li><strong>Форма обучения:</strong> {course.studyForm}</li>
+                <li><strong>Стоимость:</strong> {course.price || 'Бесплатно'}</li>
+              </ul>
+
+              <button  onClick={() => onEnroll(course)} className={styles.enrollButton}>Записаться на курс</button>
+            </div>
+
+            <div className={styles.infoRight}>
+              <img src={course.image || "/images/default-course.jpg"} alt={course.title} className={styles.courseImage} />
+            </div>
+          </div>
+
+          <div className={styles.descriptionBlock}>
+            <h2 className={styles.subTitle}>ОПИСАНИЕ</h2>
+            <p>{course.description}</p>
+            <p><strong>Срок обучения:</strong> {course.startDate } - {course.endDate}</p>
+            <a
+              href={course.programFile}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.programLink}
+            >
+              📄 СКАЧАТЬ ПРОГРАММУ
+            </a>
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>

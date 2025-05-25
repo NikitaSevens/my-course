@@ -1,22 +1,3 @@
 [
-  {
-    "id": "a15def74-70e4-402b-87f7-bb0ca218defc",
-    "title": "asdfasdf",
-    "description": "asdfadsf",
-    "startDate": "2025-05-09",
-    "endDate": "2025-05-07",
-    "durationHours": "234",
-    "durationLessons": "234",
-    "programType": "Профессиональная подготовка",
-    "studyForm": "Очная",
-    "price": "234",
-    "competence": "Менеджер по работе с персоналом",
-    "direction": "Творчество и дизайн",
-    "organization": "ГАПОУ СО «Балашовский техникум механизации сельского хозяйства»",
-    "city": "Саратав",
-    "audience": "Школьники",
-    "image": "https://storage.yandexcloud.net/my-course-bucket/1b6b1131-629d-4952-a1eb-3d117aa52f8f.png",
-    "programFile": "C:\\Users\\lokno\\react-project\\my-course\\server\\uploads\\39b18eda-5800-4257-be2d-d7f8a344f3bf.pdf"
-  }
 
 ]

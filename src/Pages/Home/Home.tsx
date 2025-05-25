@@ -1,5 +1,5 @@
 import styles from "./Home.module.css";
-import { useState } from "react";
+import { useState,useRef, } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import CourseList from "../../components/CourseList/CourseList";
@@ -9,26 +9,30 @@ import CourseDetail from '../../components/CourseDetail/CourseDetail';
 
 const Home = () => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Для EnrollPopup
-  const [selectedCourseDetail, setSelectedCourseDetail] = useState<Course | null>(null); // Для CourseDetail
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); 
+  const [selectedCourseDetail, setSelectedCourseDetail] = useState<Course | null>(null); 
 
+  const detailRef = useRef<HTMLDivElement>(null);
   const handleCourseClick = (course: Course) => {
-    setSelectedCourseDetail(course); // Открываем попап с деталями
+    setSelectedCourseDetail(course); 
+    setTimeout(() => {
+    detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100); 
   };
 
   const handleCloseDetail = () => {
-    setSelectedCourseDetail(null); // Закрываем попап с деталями
+    setSelectedCourseDetail(null); 
   };
 
   const handleOpenPopup = (course?: Course) => {
-    setSelectedCourse(course || null); // Открываем попап записи
+    setSelectedCourse(course || null); 
     setPopupOpen(true);
   };
 
   return (
     <>
       <main className={styles.main}>
-        {/* Hero Section */}
+
         <section id="hero" className={styles.hero}>
           <div className={styles.cloudBackground}>
             <div className={styles.heroContent}>
@@ -88,29 +92,29 @@ const Home = () => {
           </div>
         </section>
 
-        {/* About Section */}
+
         <section id="about" className={styles.courses}>
           <h2>О нас</h2>
         </section>
 
-        {/* Programs Section */}
+
         <section id="programs" className={styles.courses}>
           <h2>Программы</h2>
           <CourseList onCourseClick={handleCourseClick} />
         </section>
 
-        {/* Contact */}
+
+
+      {selectedCourseDetail && (
+        <div  ref={detailRef}><CourseDetail onEnroll={handleOpenPopup}  course={selectedCourseDetail} onClose={handleCloseDetail} /></div>
+      )}
         <section>
           <Footer />
         </section>
       </main>
 
-      {/* Попап: Детали курса */}
-      {selectedCourseDetail && (
-        <CourseDetail course={selectedCourseDetail} onClose={handleCloseDetail} />
-      )}
 
-      {/* Попап: Запись на курс */}
+
       {popupOpen && (
         <EnrollPopup
           onClose={() => setPopupOpen(false)}
