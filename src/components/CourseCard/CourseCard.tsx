@@ -21,8 +21,7 @@ export interface Course {
   audience: string;
 }
 
-
-const CourseCard = ({ course }: { course: Course }) => {
+const CourseCard = ({ course, onClick }: { course: Course; onClick: () => void }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [shouldScroll, setShouldScroll] = useState(false);
@@ -33,19 +32,13 @@ const CourseCard = ({ course }: { course: Course }) => {
     const wrapperWidth = wrapperRef.current?.offsetWidth || 0;
     const textWidth = textRef.current?.scrollWidth || 0;
 
-    if (textWidth > wrapperWidth) {
-      setShouldScroll(true);
-    }
+    setShouldScroll(textWidth > wrapperWidth);
   }, [course.title]);
 
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        <img
-          src={imageUrl}
-          alt={course.title}
-          className={styles.image}
-        />
+        <img src={imageUrl} alt={course.title} className={styles.image} />
         {course.programType && <span className={styles.formatBadge}>{course.programType}</span>}
       </div>
 
@@ -61,11 +54,13 @@ const CourseCard = ({ course }: { course: Course }) => {
           </div>
         </h4>
 
-        <button className={styles.viewBtn}>Смотреть</button>
+        {/* Только кнопка реагирует на клик */}
+        <button className={styles.viewBtn} onClick={onClick}>
+          Смотреть
+        </button>
       </div>
     </div>
   );
 };
-
 
 export default CourseCard;

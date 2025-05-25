@@ -177,6 +177,3 @@ app.listen(PORT, () => console.log(`Сервер запущен на порту 
 // === Отдача фронтенда ===
 app.use(express.static(path.join(__dirname, "../client/dist"))); // путь зависит от твоего билда
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});

@@ -5,13 +5,23 @@ import Footer from "../../components/Footer/Footer";
 import CourseList from "../../components/CourseList/CourseList";
 import EnrollPopup from "../../components/EnrollPopup/EnrollPopup";
 import { Course } from "../../components/CourseCard/CourseCard";
+import CourseDetail from '../../components/CourseDetail/CourseDetail';
 
 const Home = () => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Для EnrollPopup
+  const [selectedCourseDetail, setSelectedCourseDetail] = useState<Course | null>(null); // Для CourseDetail
+
+  const handleCourseClick = (course: Course) => {
+    setSelectedCourseDetail(course); // Открываем попап с деталями
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedCourseDetail(null); // Закрываем попап с деталями
+  };
 
   const handleOpenPopup = (course?: Course) => {
-    setSelectedCourse(course || null);
+    setSelectedCourse(course || null); // Открываем попап записи
     setPopupOpen(true);
   };
 
@@ -23,11 +33,7 @@ const Home = () => {
           <div className={styles.cloudBackground}>
             <div className={styles.heroContent}>
               <Header />
-              <img
-                className={styles.heroImg}
-                src="/images/copp.svg"
-                alt=""
-              />
+              <img className={styles.heroImg} src="/images/copp.svg" alt="" />
               <h1>ВЫБЕРИ СВОЙ КУРС</h1>
               <p>
                 Мы создаём творческую среду,
@@ -41,29 +47,19 @@ const Home = () => {
                   Записаться
                 </button>
               </div>
+
               <div className={styles.floatingTags}>
-                <span  style={{ top: "-200px", left: "5%", fontSize: "1.3vw" }}>
-                  #рисование
-                </span>
-                <span style={{ top: "5px", left: "12%", fontSize: "1.3vw" }}>
-                  #UI/UX
-                </span>
-                <span style={{ top: "-70px", left: "23%", fontSize: "1.3vw" }}>
-                  #Frontend
-                </span>
-                <span style={{ top: "-180px", right: "6%", fontSize: "1.3vw" }}>
-                  #группы
-                </span>
-                <span style={{ top: "-60px", right: "18%", fontSize: "1.3vw" }}>
-                  #образование
-                </span>
-                <span style={{ top: "13px", right: "4%", fontSize: "1.3vw" }}>
-                  #обучение
-                </span>
+                <span style={{ top: "-200px", left: "5%", fontSize: "1.3vw" }}>#рисование</span>
+                <span style={{ top: "5px", left: "12%", fontSize: "1.3vw" }}>#UI/UX</span>
+                <span style={{ top: "-70px", left: "23%", fontSize: "1.3vw" }}>#Frontend</span>
+                <span style={{ top: "-180px", right: "6%", fontSize: "1.3vw" }}>#группы</span>
+                <span style={{ top: "-60px", right: "18%", fontSize: "1.3vw" }}>#образование</span>
+                <span style={{ top: "13px", right: "4%", fontSize: "1.3vw" }}>#обучение</span>
               </div>
             </div>
+
             <div className={styles.reasons}>
-              <div className={`${styles.reasonItem} ${styles.special}`}  >
+              <div className={`${styles.reasonItem} ${styles.special}`}>
                 <h2>
                   <strong>Why choose</strong> <br /> Artistry?
                 </h2>
@@ -95,22 +91,26 @@ const Home = () => {
         {/* About Section */}
         <section id="about" className={styles.courses}>
           <h2>О нас</h2>
-          
         </section>
 
-        {/* Placeholder Program Section */}
+        {/* Programs Section */}
         <section id="programs" className={styles.courses}>
           <h2>Программы</h2>
-          <CourseList onCourseClick={handleOpenPopup} />
-          
+          <CourseList onCourseClick={handleCourseClick} />
         </section>
 
-        {/* Contact якорь (для футера или кнопки) */}
+        {/* Contact */}
         <section>
           <Footer />
         </section>
       </main>
 
+      {/* Попап: Детали курса */}
+      {selectedCourseDetail && (
+        <CourseDetail course={selectedCourseDetail} onClose={handleCloseDetail} />
+      )}
+
+      {/* Попап: Запись на курс */}
       {popupOpen && (
         <EnrollPopup
           onClose={() => setPopupOpen(false)}

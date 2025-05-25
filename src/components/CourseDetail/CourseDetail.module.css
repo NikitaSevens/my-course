@@ -1,0 +1,28 @@
+.overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+  padding: 24px;
+  border-radius: 20px 20px 0 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.card {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
