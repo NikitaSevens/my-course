@@ -20,9 +20,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const allowedOrigins = [
+  "https://my-coursesask.netlify.app",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+];
+
 app.use(cors({
-  origin: [ "https://my-coursesask.netlify.app", "http://localhost:3000"],
-  
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("CORS ошибка: доступ запрещён"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 
 app.use(express.json());
