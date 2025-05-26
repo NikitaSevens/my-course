@@ -124,6 +124,74 @@ app.get("/courses", (req, res) => {
   }
 });
 
+// === DELETE /courses/:id ===
+app.delete("/courses/:id", (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!fs.existsSync(coursesFile)) return res.status(404).json({ error: "Файл с курсами не найден" });
+
+    const courses = JSON.parse(fs.readFileSync(coursesFile, "utf-8"));
+    const filtered = courses.filter(course => course.id !== id);
+
+    if (filtered.length === courses.length) return res.status(404).json({ error: "Курс не найден" });
+
+    fs.writeFileSync(coursesFile, JSON.stringify(filtered, null, 2));
+    res.json({ message: "Курс удалён" });
+  } catch (err) {
+    console.error("Ошибка при удалении курса:", err);
+    res.status(500).json({ error: "Ошибка при удалении курса" });
+  }
+});
+
+// === PUT /courses/:id ===
+app.put(
+  "/courses/:id",
+  upload.fields([
+    { name: "imageFile", maxCount: 1 },
+    { name: "programFile", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    const { id } = req.params;
+    const data = req.body;
+    const files = req.files;
+
+    try {
+      let courses = JSON.parse(fs.readFileSync(coursesFile, "utf-8"));
+      const index = courses.findIndex(course => course.id === id);
+      if (index === -1) return res.status(404).json({ error: "Курс не найден" });
+
+      let imageUrl = courses[index].image;
+      let programUrl = courses[index].programFile;
+
+      if (files?.imageFile?.[0]) {
+        const filename = `${uuidv4()}${path.extname(files.imageFile[0].originalname)}`;
+        imageUrl = await uploadToS3(files.imageFile[0], filename);
+      }
+
+      if (files?.programFile?.[0]) {
+        const filename = `${uuidv4()}${path.extname(files.programFile[0].originalname)}`;
+        programUrl = await uploadToS3(files.programFile[0], filename);
+      }
+
+      const updatedCourse = {
+        ...courses[index],
+        ...data,
+        image: imageUrl,
+        programFile: programUrl,
+      };
+
+      courses[index] = updatedCourse;
+      fs.writeFileSync(coursesFile, JSON.stringify(courses, null, 2));
+      res.json({ message: "Курс обновлён", course: updatedCourse });
+    } catch (err) {
+      console.error("Ошибка при обновлении курса:", err);
+      res.status(500).json({ error: "Ошибка при обновлении курса" });
+    }
+  }
+);
+
+
 // === GET /courses/:id ===
 app.get("/courses/:id", (req, res) => {
   const { id } = req.params;

@@ -8,7 +8,7 @@
 }
 
 .card {
-  max-width: 1100px;
+  max-width: 1600px;
   margin: 0 auto;
   position: relative;
 }
@@ -39,10 +39,13 @@
   font-size: 32px;
   font-weight: bold;
   color: #4285f4;
-  margin-bottom: 24px;
+  margin-bottom: 44px;
 }
 
 .courseMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2vw;
   list-style: none;
   padding: 0;
   margin: 0 0 24px 0;
@@ -51,6 +54,7 @@
 
 .courseMeta li {
   margin-bottom: 10px;
+
 }
 
 .enrollButton {
@@ -76,7 +80,8 @@
 }
 
 .courseImage {
-  max-width: 100%;
+  max-width: 80%;
+
   border-radius: 12px;
   margin-bottom: 12px;
 }
@@ -88,9 +93,10 @@
 
 .descriptionBlock {
   margin-top: 40px;
-}
-.descriptionBlock {
   overflow-wrap: break-word;
+}
+.descriptionBlock p{
+  margin-bottom: 15px;
 }
 
 .subTitle {
@@ -107,6 +113,14 @@
   font-weight: bold;
   text-decoration: none;
 }
+
+.noProgram {
+  margin-top: 16px;
+  font-weight: bold;
+  color: #999999;
+  font-style: italic;
+}
+
 
 
 @media (max-width: 655px) {

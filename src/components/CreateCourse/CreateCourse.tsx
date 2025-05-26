@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./CreateCourse.module.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -31,8 +32,36 @@ const CreateCourse = () => {
   const [imageFile, setImageFile] = useState<File | null>(null); // файл
   const [preview, setPreview] = useState<string | null>(null); // превью картинки
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const course = location.state?.course;
+
+  const isEditing = Boolean(course);
+
+  useEffect(() => {
+  const courseFromState = location.state?.course;
+
+  if (courseFromState) {
+    setForm({
+      ...initialForm,
+      ...courseFromState,
+      programFile: null,
+    });
+    setImage(courseFromState.image || "");
+    setPreview(courseFromState.image || null);
+  } else {
+    setForm(initialForm);
+    setImage("");
+    setPreview(null);
+  }
+}, [location.state]);
+
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name as FormKeys]: value }));
@@ -49,10 +78,8 @@ const CreateCourse = () => {
       setImageFile(file);
       setImage(""); // очищаем ссылку, если выбран файл
       setPreview(URL.createObjectURL(file));
-      
     }
   };
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +115,11 @@ const CreateCourse = () => {
       console.log(pair[0], pair[1]);
     }
 
-    fetch(`${apiUrl}/courses`, {
-      method: "POST",
+    const url = course ? `${apiUrl}/courses/${course.id}` : `${apiUrl}/courses`;
+    const method = course ? "PUT" : "POST";
+
+    fetch(url, {
+      method,
       body: courseData,
     })
       .then(async (res) => {
@@ -103,13 +133,13 @@ const CreateCourse = () => {
           throw new Error(errorText || "Ошибка при отправке");
         }
         return res.json();
-        
       })
       .then((data) => {
-    console.log("Ответ от сервера:", data);
-  })
+        console.log("Ответ от сервера:", data);
+      })
       .then(() => {
-        alert("Курс успешно добавлен!");
+        alert(`Курс успешно ${course ? "обновлён" : "добавлен"}!`);
+        navigate("/admin/courses");
         setForm(initialForm);
         setImageFile(null);
         setPreview(null);
@@ -123,11 +153,10 @@ const CreateCourse = () => {
       });
   };
 
-
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>Создание курса</h2>
+        <h2>{course ? "Редактировать курс" : "Создать курс"}</h2>
         <div className={styles.upload}>
           <label className={styles.uploadBox}>
             {preview ? (
@@ -247,7 +276,6 @@ const CreateCourse = () => {
             <option>Онлайн</option>
           </select>
         </label>
-
 
         <label className={styles.field}>
           Стоимость (₽)
@@ -444,7 +472,7 @@ const CreateCourse = () => {
         </label>
 
         <button className={styles.submit} type="submit">
-          Создать курс
+          {isEditing ? "Сохранить курс" : "Создать курс"}
         </button>
       </form>
     </div>

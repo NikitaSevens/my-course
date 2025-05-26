@@ -61,6 +61,24 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const handleNext = () => setCurrentPage(2);
   const handleBack = () => setCurrentPage(1);
 
+
+  useEffect(() => {
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/courses`);
+      if (Array.isArray(response.data)) {
+        setCourses(response.data);
+      } else {
+        console.error("Ошибка: ожидается массив курсов");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке курсов:", error);
+    }
+  };
+  
+
+  fetchCourses();
+}, []);
   //КЕМ ВЫДАН ПАСПОРТ
   useEffect(() => {
     const jQueryScript = document.createElement("script");
