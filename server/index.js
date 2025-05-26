@@ -23,15 +23,19 @@ const app = express();
 const allowedOrigins = [
   "https://my-coursesask.netlify.app",
   "http://localhost:3000",
-  "http://127.0.0.1:3000"
+  "http://127.0.0.1:3000",
 ];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+  origin: function (origin, callback) {
+    // Разрешаем запросы без Origin (например, Postman или SSR)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
-      return callback(new Error("CORS ошибка: доступ запрещён"));
+      console.warn("CORS блокировка для:", origin);
+      return callback(new Error("CORS запрещён"), false);
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -299,6 +303,14 @@ app.post("/send-doc", async (req, res) => {
     res.status(500).json({ error: "Ошибка при отправке письма" });
   }
 });
+
+app.use((err, req, res, next) => {
+  if (err.message === "CORS запрещён") {
+    return res.status(403).json({ error: "Запрещённый источник (CORS)" });
+  }
+  next(err); // остальные ошибки
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
