@@ -226,7 +226,7 @@ app.post("/send-doc", async (req, res) => {
     await transporter.sendMail({
       from: "loknoi729@gmail.com",
       to: "mycoursesask@gmail.com",
-      subject: "Документ с сайта",
+      subject: `📄 Документ от ${data.name} – ${new Date().toLocaleDateString("ru-RU")}`,
       text: "Документ во вложении",
       attachments: [{ path: filePath }],
     });

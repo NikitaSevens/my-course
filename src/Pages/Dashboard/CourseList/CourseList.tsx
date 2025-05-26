@@ -27,10 +27,10 @@ const DashboardPage = () => {
     const start = new Date(course.startDate);
     const end = new Date(course.endDate);
 
-    if (filter === "All") return true;
-    if (filter === "Active") return start <= today && end >= today;
-    if (filter === "Upcoming") return start > today;
-    if (filter === "Completed") return end < today;
+    if (filter === "Все") return true;
+    if (filter === "Активные") return start <= today && end >= today;
+    if (filter === "Будут") return start > today;
+    if (filter === "Завершенные") return end < today;
 
     return true;
   });
@@ -53,7 +53,7 @@ const DashboardPage = () => {
         <h2 className={styles.title}>Курсы</h2>
 
         <div className={styles.list}>
-          {["All", "Active", "Upcoming", "Completed"].map((status) => (
+          {["Все", "Активные", "Будут", "Завершенные"].map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}

@@ -375,7 +375,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   
     // Отправляем на сервер
     try {
-      const response = await fetch(`${apiUrl}/courses`, {
+      const response = await fetch(`${apiUrl}/send-doc`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

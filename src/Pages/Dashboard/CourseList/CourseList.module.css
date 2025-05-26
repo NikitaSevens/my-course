@@ -2,7 +2,10 @@
   display: flex;
   gap: 24px;
   padding: 32px;
+  background: #ffffff;
+  border-radius: 10px;
 }
+
 
 .container {
   flex: 2;
@@ -22,18 +25,20 @@
   gap: 10px;
 }
 
+
 .list button {
-  background: #6090dd;
+  background-color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  border:  1px solid #4285f4;
 }
 
-.activeFilter {
-  background: #4285f4;
-  color: white;
+.list button.activeFilter  {
+  background-color: #4285f4;
+  color:#ffffff;
 }
 
 .courseGrid {
