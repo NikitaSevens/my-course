@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./CourseList.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Course {
   id: string;
