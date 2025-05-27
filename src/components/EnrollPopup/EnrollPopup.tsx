@@ -966,6 +966,13 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                         />
                       </label>
                       <label>
+                            Адрес фактического проживания:
+                            <input
+                              value={customAddress}
+                              onChange={handleCustomAddressChange} // Обработчик изменения
+                            />
+                          </label>
+                      <label>
                         Место работы, учёбы:
                         <input
                           value={placeOfStudy}
