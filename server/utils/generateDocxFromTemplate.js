@@ -8,8 +8,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function generateDocxFromTemplate(data, outputPath) {
-  const templatePath = path.join(__dirname, "../templates/child-under-14.docx");
+  // Выбор шаблона по возрасту
+  let templateFile = "";
 
+  if (data.age < 14) {
+    templateFile = "child-under-14.docx";
+  } else if (data.age < 18) {
+    templateFile = "child-under-18.docx";
+  } else {
+    templateFile = "grown-human.docx";
+  }
+
+  const templatePath = path.join(__dirname, "../templates", templateFile);
   const content = fs.readFileSync(templatePath, "binary");
   const zip = new PizZip(content);
 
@@ -23,7 +33,7 @@ export function generateDocxFromTemplate(data, outputPath) {
   });
 
   try {
-    doc.render(data); // ⬅️ передаем данные прямо сюда
+    doc.render(data);
   } catch (error) {
     console.error("Ошибка генерации DOCX:", error);
     throw error;

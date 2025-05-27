@@ -54,6 +54,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const [placeOfStudy, setPlaceOfStudy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [parentBirthCertNumber, setParentBirthCertNumber] = useState("");
+  const [adress, setAdress] = useState("");
   const [errors, setErrors] = useState({
     series: "",
     number: "",
@@ -352,6 +353,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
       name,
       birthDate,
       snils,
+      adress,
       documentType,
       docSeries: docSeries.replace(/\s/g, ""),
       docNumber,
@@ -966,12 +968,14 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                         />
                       </label>
                       <label>
-                            Адрес фактического проживания:
-                            <input
-                              value={customAddress}
-                              onChange={handleCustomAddressChange} // Обработчик изменения
-                            />
-                          </label>
+                        Адрес фактического проживания:
+                        <input
+                          value={adress}
+                          onChange={(e) => setAdress(e.target.value)}
+                          placeholder="г. Cаратов, ул. Ленина, д. 10, кв. 5"
+                        />
+                      </label>
+
                       <label>
                         Место работы, учёбы:
                         <input
