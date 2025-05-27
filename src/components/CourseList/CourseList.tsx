@@ -9,6 +9,7 @@ if (!apiUrl) {
 
 const CourseList = ({ onCourseClick }: { onCourseClick: (course: Course) => void }) => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true); // Добавили состояние загрузки
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -19,6 +20,8 @@ const CourseList = ({ onCourseClick }: { onCourseClick: (course: Course) => void
         setCourses(data);
       } catch (err) {
         console.error("Ошибка при загрузке курсов с сервера:", err);
+      } finally {
+        setLoading(false); // Обновим состояние независимо от результата
       }
     };
 
@@ -28,17 +31,20 @@ const CourseList = ({ onCourseClick }: { onCourseClick: (course: Course) => void
   return (
     <div className={styles.wrapper}>
       <div className={styles.scrollContainer}>
-        {courses.map(course => (
-          // Убираем onClick с обёртки
-          <div key={course.id} className={styles.cardWrapper}>
-            {/* Передаём onClick только кнопке */}
-            <CourseCard course={course} onClick={() => onCourseClick(course)} />
-          </div>
-        ))}
+        {loading
+          ? [...Array(4)].map((_, index) => (
+              <div key={index} className={styles.cardWrapper}>
+                <div className={styles.skeletonCard} />
+              </div>
+            ))
+          : courses.map(course => (
+              <div key={course.id} className={styles.cardWrapper}>
+                <CourseCard course={course} onClick={() => onCourseClick(course)} />
+              </div>
+            ))}
       </div>
     </div>
   );
 };
 
 export default CourseList;
-

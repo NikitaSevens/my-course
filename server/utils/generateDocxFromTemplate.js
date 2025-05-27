@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function generateDocxFromTemplate(data, outputPath) {
-  const templatePath = path.join(__dirname, "../templates/template.docx");
+  const templatePath = path.join(__dirname, "../templates/child-under-14.docx");
 
   const content = fs.readFileSync(templatePath, "binary");
   const zip = new PizZip(content);

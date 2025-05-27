@@ -51,7 +51,9 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const [fundingType, setFundingType] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourseTitle, setSelectedCourseTitle] = useState("");
+  const [placeOfStudy, setPlaceOfStudy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [parentBirthCertNumber, setParentBirthCertNumber] = useState("");
   const [errors, setErrors] = useState({
     series: "",
     number: "",
@@ -61,24 +63,22 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const handleNext = () => setCurrentPage(2);
   const handleBack = () => setCurrentPage(1);
 
-
   useEffect(() => {
-  const fetchCourses = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/courses`);
-      if (Array.isArray(response.data)) {
-        setCourses(response.data);
-      } else {
-        console.error("Ошибка: ожидается массив курсов");
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/courses`);
+        if (Array.isArray(response.data)) {
+          setCourses(response.data);
+        } else {
+          console.error("Ошибка: ожидается массив курсов");
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке курсов:", error);
       }
-    } catch (error) {
-      console.error("Ошибка при загрузке курсов:", error);
-    }
-  };
-  
+    };
 
-  fetchCourses();
-}, []);
+    fetchCourses();
+  }, []);
   //КЕМ ВЫДАН ПАСПОРТ
   useEffect(() => {
     const jQueryScript = document.createElement("script");
@@ -333,11 +333,11 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // Валидация паспорта
     const seriesError = validateSeries(docSeries);
     const numberError = validateNumber(docNumber);
-  
+
     if (seriesError || numberError) {
       setErrors({
         series: seriesError,
@@ -345,7 +345,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
       });
       return;
     }
-  
+
     // Собираем объект
     const newEnroll = {
       id: Date.now(),
@@ -368,11 +368,14 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
       parentPassport,
       parentIssuedBy,
       parentAddress,
+      dateСertificate,
       fundingType,
       age: calculateAge(birthDate),
       course: selectedCourseTitle,
+      placeOfStudy,
+      parentBirthCertNumber,
     };
-  
+
     // Отправляем на сервер
     try {
       const response = await fetch(`${apiUrl}/send-doc`, {
@@ -382,17 +385,19 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
         },
         body: JSON.stringify(newEnroll),
       });
-  
+
       if (!response.ok) {
         throw new Error("Ошибка при отправке на сервер");
       }
-  
+
       // Сохраняем в localStorage
       const storedEnrollments = localStorage.getItem("enrollments");
-      const enrollments = storedEnrollments ? JSON.parse(storedEnrollments) : [];
+      const enrollments = storedEnrollments
+        ? JSON.parse(storedEnrollments)
+        : [];
       enrollments.push(newEnroll);
       localStorage.setItem("enrollments", JSON.stringify(enrollments));
-  
+
       alert("Вы успешно записались на курс! Документ отправлен на почту.");
       onClose();
     } catch (error) {
@@ -400,7 +405,6 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
       alert("Произошла ошибка при отправке данных на сервер.");
     }
   };
-  
 
   //ЗАПРЕТ НА СКРОЛЛ
   useEffect(() => {
@@ -501,241 +505,259 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
         <h2>Запись на курс</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.form}>
-          {currentPage === 1 && (
-            <div>
-              <div className={styles.scrollOne}>
-                <label>
-                  ФИО:
-                  <input
-                    value={name}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
-  
-                      const wordCount = value
-                        .trim()
-                        .split(/\s+/)
-                        .filter(Boolean).length;
-  
-                      if (onlyRussianLetters.test(value) && wordCount <= 3) {
-                        setName(value);
+            {currentPage === 1 && (
+              <div>
+                <div className={styles.scrollOne}>
+                  <label>
+                    ФИО:
+                    <input
+                      value={name}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
+
+                        const wordCount = value
+                          .trim()
+                          .split(/\s+/)
+                          .filter(Boolean).length;
+
+                        if (onlyRussianLetters.test(value) && wordCount <= 3) {
+                          setName(value);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const formatted = e.target.value
+                          .trim()
+                          .replace(/\s+/g, " ")
+                          .replace(
+                            /(^|\s)([а-яё])/g,
+                            (_, p1, p2) => p1 + p2.toUpperCase()
+                          );
+                        setName(formatted);
+                      }}
+                      required
+                      pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
+                      title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
+                      placeholder="Иванов Иван Иванович"
+                      maxLength={60}
+                    />
+                  </label>
+                  <label>
+                    Дата рождения:
+                    <input
+                      type="date"
+                      value={birthDate}
+                      onChange={handleChange}
+                      required
+                      min={getMinDate()}
+                      max={getMaxDate()}
+                      className={error ? "error" : ""}
+                    />
+                    {error && <div className="error-message">{error}</div>}
+                  </label>
+                  <label>
+                    Номер телефона:
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={handleChangeOne}
+                      required
+                      placeholder="+7 (___) ___-__-__"
+                      maxLength={18} // Для форматированного номера
+                      className={error ? "error" : ""}
+                    />
+                    {error && <div className="error-message">{error}</div>}
+                  </label>
+                  <label>
+                    Электронная почта:
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) =>
+                        handleEmailChange(
+                          e.target.value,
+                          setEmail,
+                          setEmailError
+                        )
                       }
-                    }}
-                    onBlur={(e) => {
-                      const formatted = e.target.value
-                        .trim()
-                        .replace(/\s+/g, " ")
-                        .replace(
-                          /(^|\s)([а-яё])/g,
-                          (_, p1, p2) => p1 + p2.toUpperCase()
-                        );
-                      setName(formatted);
-                    }}
-                    required
-                    pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
-                    title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
-                    placeholder="Иванов Иван Иванович"
-                    maxLength={60}
-                  />
-                </label>
-                <label>
-                  Дата рождения:
-                  <input
-                    type="date"
-                    value={birthDate}
-                    onChange={handleChange}
-                    required
-                    min={getMinDate()}
-                    max={getMaxDate()}
-                    className={error ? "error" : ""}
-                  />
-                  {error && <div className="error-message">{error}</div>}
-                </label>
-                <label>
-                  Номер телефона:
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={handleChangeOne}
-                    required
-                    placeholder="+7 (___) ___-__-__"
-                    maxLength={18} // Для форматированного номера
-                    className={error ? "error" : ""}
-                  />
-                  {error && <div className="error-message">{error}</div>}
-                </label>
-                <label>
-                  Электронная почта:
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) =>
-                      handleEmailChange(e.target.value, setEmail, setEmailError)
-                    }
-                    required
-                    placeholder="example@mail.com"
-                    className={emailError ? "error" : ""}
-                  />
-                  {emailError && (
-                    <div className="error-message">{emailError}</div>
-                  )}
-                </label>
-                <label>
-                  СНИЛС:
-                  <input
-                    value={snils}
-                    onChange={(e) => {
-                      const cleanedValue = e.target.value
-                        .replace(/\D/g, "")
-                        .slice(0, 11);
-                      setSnils(cleanedValue);
-                    }}
-                    minLength={11} //
-                    type="text" //
-                    inputMode="numeric" //
-                  />
-                </label>
-                <label>
-                  Наименование программы:
-                  <select
-                    value={selectedCourseTitle}
-                    onChange={(e) => setSelectedCourseTitle(e.target.value)}
-                    required
-                  >
-                    <option value="">Выберите курс</option>
-                    {courses.map((course) => (
-                      <option key={course.id} value={course.title}>
-                        {course.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  Тип финансирования:
-                  <select
-                    value={fundingType}
-                    onChange={(e) => setFundingType(e.target.value)}
-                    required
-                  >
-                    <option value="">Выберите</option>
-                    <option value="budget">Бюджет</option>
-                    <option value="commercial">Коммерция</option>
-                  </select>
-                </label>
-              </div>
-                <button type="button" onClick={handleNext} className={styles.submitBtn}>
+                      required
+                      placeholder="example@mail.com"
+                      className={emailError ? "error" : ""}
+                    />
+                    {emailError && (
+                      <div className="error-message">{emailError}</div>
+                    )}
+                  </label>
+                  <label>
+                    СНИЛС:
+                    <input
+                      value={snils}
+                      onChange={(e) => {
+                        const cleanedValue = e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 11);
+                        setSnils(cleanedValue);
+                      }}
+                      minLength={11} //
+                      type="text" //
+                      inputMode="numeric" //
+                    />
+                  </label>
+                  <label>
+                    Наименование программы:
+                    <select
+                      value={selectedCourseTitle}
+                      onChange={(e) => setSelectedCourseTitle(e.target.value)}
+                      required
+                    >
+                      <option value="">Выберите курс</option>
+                      {courses.map((course) => (
+                        <option key={course.id} value={course.title}>
+                          {course.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Тип финансирования:
+                    <select
+                      value={fundingType}
+                      onChange={(e) => setFundingType(e.target.value)}
+                      required
+                    >
+                      <option value="">Выберите</option>
+                      <option value="budget">Бюджет</option>
+                      <option value="commercial">Коммерция</option>
+                    </select>
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className={styles.submitBtn}
+                >
                   Далее
                 </button>
-            </div>
-          )}
+              </div>
+            )}
 
-          {currentPage === 2 && (
-            <div>
-              <div className={styles.scrollTwo}>
-                <label>
-                  Документ:
-                  <select
-                    value={documentType}
-                    onChange={(e) => setDocumentType(e.target.value)}
-                    required
-                  >
-                    <option value="">Выберите</option>
-                    <option value="passport">Паспорт</option>
-                    <option value="birthCert">Свидетельство о рождении</option>
-                  </select>
-                </label>
-  
-                {documentType === "passport" && (
-                  <>
-                    <label>
-                      Серия:
-                      <input
-                        type="text"
-                        value={docSeries}
-                        onChange={handleSeriesChange}
-                        placeholder="12 34"
-                        maxLength={5} // 4 цифры + пробел
-                        inputMode="numeric"
-                        className={errors.series ? "error" : ""}
-                      />
-                      {errors.series && (
-                        <div className="error-message">{errors.series}</div>
-                      )}
-                    </label>
-                    <label>
-                      Номер:
-                      <input
-                        type="text"
-                        value={docNumber}
-                        onChange={handleNumberChange}
-                        placeholder="123456"
-                        maxLength={6}
-                        inputMode="numeric"
-                        className={errors.number ? "error" : ""}
-                      />
-                      {errors.number && (
-                        <div className="error-message">{errors.number}</div>
-                      )}
-                    </label>
-                    <label>
-                      Дата выдачи:
-                      <input
-                        type="date"
-                        value={docDate}
-                        onChange={(e) => setDocDate(e.target.value)}
-                        min={
-                          birthDate
-                            ? new Date(
-                                new Date(birthDate).setFullYear(
-                                  new Date(birthDate).getFullYear() + 14
+            {currentPage === 2 && (
+              <div>
+                <div className={styles.scrollTwo}>
+                  <label>
+                    Документ:
+                    <select
+                      value={documentType}
+                      onChange={(e) => setDocumentType(e.target.value)}
+                      required
+                    >
+                      <option value="">Выберите</option>
+                      <option value="passport">Паспорт</option>
+                      <option value="birthCert">
+                        Свидетельство о рождении
+                      </option>
+                    </select>
+                  </label>
+
+                  {documentType === "passport" && (
+                    <>
+                      <label>
+                        Серия:
+                        <input
+                          type="text"
+                          value={docSeries}
+                          onChange={handleSeriesChange}
+                          placeholder="12 34"
+                          maxLength={5} // 4 цифры + пробел
+                          inputMode="numeric"
+                          className={errors.series ? "error" : ""}
+                        />
+                        {errors.series && (
+                          <div className="error-message">{errors.series}</div>
+                        )}
+                      </label>
+                      <label>
+                        Номер:
+                        <input
+                          type="text"
+                          value={docNumber}
+                          onChange={handleNumberChange}
+                          placeholder="123456"
+                          maxLength={6}
+                          inputMode="numeric"
+                          className={errors.number ? "error" : ""}
+                        />
+                        {errors.number && (
+                          <div className="error-message">{errors.number}</div>
+                        )}
+                      </label>
+                      <label>
+                        Дата выдачи:
+                        <input
+                          type="date"
+                          value={docDate}
+                          onChange={(e) => setDocDate(e.target.value)}
+                          min={
+                            birthDate
+                              ? new Date(
+                                  new Date(birthDate).setFullYear(
+                                    new Date(birthDate).getFullYear() + 14
+                                  )
                                 )
-                              )
-                                .toISOString()
-                                .split("T")[0]
-                            : ""
-                        }
-                        max={new Date().toISOString().split("T")[0]} // сегодня
-                      />
-                    </label>
-                    <label>
-                      Кем выдан:
-                      <input
-                        id="js-FMSField"
-                        type="text"
-                        value={docIssuedBy ?? ""} // защищено от undefined
-                        onChange={(e) => setDocIssuedBy(e.target.value)}
-                        placeholder="Подразделение, выдавшее паспорт"
-                      />
-                    </label>
-                    <label>
-                      Адрес регистрации:
-                      <input
-                        value={passportAddress}
-                        onChange={handleChangeSearch} // Обработчик изменения
-                        className={styles.input}
-                        placeholder="Начните вводить адрес..."
-                      />
-                    </label>
-                    <div className={styles.suggestionsWrapper}>
-                      {passportSuggestions.length > 0 && (
-                        <ul className={styles.suggestionsList}>
-                          {passportSuggestions.map((suggestion, index) => (
-                            <li
-                              key={index}
-                              onClick={() => handlePassportSelect(suggestion)} // Обработчик выбора из подсказок
-                              className={styles.suggestionItem}
-                            >
-                              {suggestion}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                    {/* Остальная форма */}
-                    <label className={styles.notLivingByPassport}>
-                      <p>
-                        Проживаю не по паспорту
-                      </p>
+                                  .toISOString()
+                                  .split("T")[0]
+                              : ""
+                          }
+                          max={new Date().toISOString().split("T")[0]} // сегодня
+                        />
+                      </label>
+                      <label>
+                        Кем выдан:
+                        <input
+                          id="js-FMSField"
+                          type="text"
+                          value={docIssuedBy ?? ""} // защищено от undefined
+                          onChange={(e) => setDocIssuedBy(e.target.value)}
+                          placeholder="Подразделение, выдавшее паспорт"
+                        />
+                      </label>
+                      <label>
+                        Адрес регистрации:
+                        <input
+                          value={passportAddress}
+                          onChange={handleChangeSearch} // Обработчик изменения
+                          className={styles.input}
+                          placeholder="Начните вводить адрес..."
+                        />
+                      </label>
+                      <label>
+                        Место работы, учёбы:
+                        <input
+                          value={placeOfStudy}
+                          onChange={(e) => setPlaceOfStudy(e.target.value)}
+                          placeholder="МОУ СОШ №1 г.Саратова"
+                          maxLength={100}
+                        />
+                      </label>
+
+                      <div className={styles.suggestionsWrapper}>
+                        {passportSuggestions.length > 0 && (
+                          <ul className={styles.suggestionsList}>
+                            {passportSuggestions.map((suggestion, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handlePassportSelect(suggestion)} // Обработчик выбора из подсказок
+                                className={styles.suggestionItem}
+                              >
+                                {suggestion}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                      {/* Остальная форма */}
+                      <label className={styles.notLivingByPassport}>
+                        <p>Проживаю не по паспорту</p>
                         <input
                           type="checkbox"
                           checked={notLivingByPassport}
@@ -743,318 +765,365 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                             setNotLivingByPassport(e.target.checked)
                           }
                         />
-                    </label>
-                    {notLivingByPassport && (
-                      <>
+                      </label>
+                      {notLivingByPassport && (
+                        <>
+                          <label>
+                            Адрес фактического проживания:
+                            <input
+                              value={customAddress}
+                              onChange={handleCustomAddressChange} // Обработчик изменения
+                            />
+                          </label>
+
+                          <div className={styles.suggestionsWrapper}>
+                            {customSuggestions.length > 0 && (
+                              <ul className={styles.suggestionsList}>
+                                {customSuggestions.map((suggestion, index) => (
+                                  <li
+                                    key={index}
+                                    onClick={() =>
+                                      handleCustomSelect(suggestion)
+                                    } // Обработчик выбора из подсказок
+                                    className={styles.suggestionItem}
+                                  >
+                                    {suggestion}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </>
+                      )}
+                      {age !== null && age < 18 && (
+                        <>
+                          <label>
+                            ФИО родителя:
+                            <input
+                              value={parentFio}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                // Разрешаем только русские буквы, пробелы и дефисы
+                                const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
+
+                                // Проверяем количество слов (не более 3)
+                                const wordCount = value
+                                  .trim()
+                                  .split(/\s+/)
+                                  .filter(Boolean).length;
+
+                                if (
+                                  onlyRussianLetters.test(value) &&
+                                  wordCount <= 3
+                                ) {
+                                  setParentFio(value);
+                                }
+                              }}
+                              onBlur={(e) => {
+                                // Автоматически форматируем при потере фокуса
+                                const formatted = e.target.value
+                                  .trim()
+                                  .replace(/\s+/g, " ") // Удаляем лишние пробелы
+                                  .replace(
+                                    /(^|\s)([а-яё])/g,
+                                    (_, p1, p2) => p1 + p2.toUpperCase()
+                                  ); // Делаем первые буквы заглавными
+
+                                setParentFio(formatted);
+                              }}
+                              required
+                              pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
+                              title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
+                              placeholder="Иванов Иван Иванович"
+                              maxLength={60} // Ограничение по длине
+                            />
+                          </label>
+
+                          <label>
+                            Номер телефона родителя:
+                            <input
+                              type="tel"
+                              value={parentPhone}
+                              onChange={handleParentPhoneChange}
+                              placeholder="+7 (___) ___-__-__"
+                              maxLength={18}
+                              className={parentPhoneError ? "error" : ""}
+                            />
+                            {parentPhoneError && (
+                              <div className="error-message">
+                                {parentPhoneError}
+                              </div>
+                            )}
+                          </label>
+
+                          <label>
+                            Дата рождения родителя:
+                            <input
+                              type="date"
+                              value={parentBirthCertNumber}
+                              onChange={(e) =>
+                                setParentBirthCertNumber(e.target.value)
+                              }
+                              max={new Date().toISOString().split("T")[0]}
+                              required
+                            />
+                          </label>
+
+                          <label>
+                            Электронная почта родителя:
+                            <input
+                              type="email"
+                              value={parentEmail}
+                              onChange={(e) =>
+                                handleEmailChange(
+                                  e.target.value,
+                                  setParentEmail,
+                                  setParentEmailError
+                                )
+                              }
+                              required
+                              placeholder="example@mail.com"
+                              className={parentEmailError ? "error" : ""}
+                            />
+                            {parentEmailError && (
+                              <div className="error-message">
+                                {parentEmailError}
+                              </div>
+                            )}
+                          </label>
+
+                          <label>
+                            Серия и номер паспорта родителя:
+                            <input
+                              maxLength={11} // 10 цифр + 1 пробел
+                              value={parentPassport}
+                              onChange={(e) => {
+                                const onlyDigits = e.target.value
+                                  .replace(/\D/g, "")
+                                  .slice(0, 10);
+                                const formatted =
+                                  onlyDigits.length > 4
+                                    ? `${onlyDigits.slice(
+                                        0,
+                                        4
+                                      )} ${onlyDigits.slice(4)}`
+                                    : onlyDigits;
+
+                                setParentPassport(formatted);
+                              }}
+                            />
+                          </label>
+
+                          <label>
+                            Кем и когда выдан паспорт:
+                            <input
+                              value={parentIssuedBy}
+                              onChange={(e) =>
+                                setParentIssuedBy(e.target.value)
+                              }
+                            />
+                          </label>
+                          <label>
+                            Адрес проживания родителя:
+                            <input
+                              value={parentAddress}
+                              onChange={(e) => setParentAddress(e.target.value)}
+                            />
+                          </label>
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  {documentType === "birthCert" && (
+                    <>
+                      <label>
+                        Номер и серия свидетельства:
+                        <input
+                          value={birthCertNumber}
+                          onChange={(e) => setBirthCertNumber(e.target.value)}
+                          placeholder="III-AH №222222"
+                        />
+                      </label>
+                      <label>
+                        Дата выдачи:
+                        <input
+                          type="date"
+                          value={dateСertificate}
+                          onChange={handleChange}
+                          required
+                          min={getMinDate()}
+                          max={getMaxDate()}
+                          className={error ? "error" : ""}
+                        />
+                        {error && <div className="error-message">{error}</div>}
+                      </label>
+                      <label>
+                        Место гос. регистрации:
+                        <input
+                          value={passportAddress}
+                          onChange={(e) => setPassportAddress(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Место работы, учёбы:
+                        <input
+                          value={placeOfStudy}
+                          onChange={(e) => setPlaceOfStudy(e.target.value)}
+                          placeholder="МОУ СОШ №1 г.Саратова"
+                          maxLength={100}
+                        />
+                      </label>
+
+                      {notLivingByPassport && (
                         <label>
                           Адрес фактического проживания:
                           <input
                             value={customAddress}
-                            onChange={handleCustomAddressChange} // Обработчик изменения
+                            onChange={(e) => setCustomAddress(e.target.value)}
                           />
                         </label>
-  
-                        <div className={styles.suggestionsWrapper}>
-                          {customSuggestions.length > 0 && (
-                            <ul className={styles.suggestionsList}>
-                              {customSuggestions.map((suggestion, index) => (
-                                <li
-                                  key={index}
-                                  onClick={() => handleCustomSelect(suggestion)} // Обработчик выбора из подсказок
-                                  className={styles.suggestionItem}
-                                >
-                                  {suggestion}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {age !== null && age < 18 && (
-                      <>
-                        <label>
-                      ФИО родителя:
-                      <input
-                        value={parentFio}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          // Разрешаем только русские буквы, пробелы и дефисы
-                          const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
-  
-                          // Проверяем количество слов (не более 3)
-                          const wordCount = value
-                            .trim()
-                            .split(/\s+/)
-                            .filter(Boolean).length;
-  
-                          if (onlyRussianLetters.test(value) && wordCount <= 3) {
-                            setParentFio(value);
-                          }
-                        }}
-                        onBlur={(e) => {
-                          // Автоматически форматируем при потере фокуса
-                          const formatted = e.target.value
-                            .trim()
-                            .replace(/\s+/g, " ") // Удаляем лишние пробелы
-                            .replace(
-                              /(^|\s)([а-яё])/g,
-                              (_, p1, p2) => p1 + p2.toUpperCase()
-                            ); // Делаем первые буквы заглавными
-  
-                          setParentFio(formatted);
-                        }}
-                        required
-                        pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
-                        title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
-                        placeholder="Иванов Иван Иванович"
-                        maxLength={60} // Ограничение по длине
-                      />
-                        </label>
-  
-                        <label>
-                          Номер телефона родителя:
-                          <input
-                            type="tel"
-                            value={parentPhone}
-                            onChange={handleParentPhoneChange}
-                            placeholder="+7 (___) ___-__-__"
-                            maxLength={18}
-                            className={parentPhoneError ? "error" : ""}
-                          />
-                          {parentPhoneError && (
-                            <div className="error-message">
-                              {parentPhoneError}
-                            </div>
-                          )}
-                        </label>
-  
-                        <label>
-                          Электронная почта родителя:
-                          <input
-                            type="email"
-                            value={parentEmail}
-                            onChange={(e) =>
-                              handleEmailChange(
-                                e.target.value,
-                                setParentEmail,
-                                setParentEmailError
-                              )
-                            }
-                            required
-                            placeholder="example@mail.com"
-                            className={parentEmailError ? "error" : ""}
-                          />
-                          {parentEmailError && (
-                            <div className="error-message">
-                              {parentEmailError}
-                            </div>
-                          )}
-                        </label>
-  
-                        <label>
-                          Серия и номер паспорта родителя:
-                          <input
-                            maxLength={11} // 10 цифр + 1 пробел
-                            value={parentPassport}
-                            onChange={(e) => {
-                              const onlyDigits = e.target.value
-                                .replace(/\D/g, "")
-                                .slice(0, 10);
-                              const formatted =
-                                onlyDigits.length > 4
-                                  ? `${onlyDigits.slice(0, 4)} ${onlyDigits.slice(
-                                      4
-                                    )}`
-                                  : onlyDigits;
-  
-                              setParentPassport(formatted);
-                            }}
-                          />
-                        </label>
-  
-                        <label>
-                          Кем и когда выдан паспорт:
-                          <input
-                            value={parentIssuedBy}
-                            onChange={(e) => setParentIssuedBy(e.target.value)}
-                          />
-                        </label>
-                        <label>
-                          Адрес проживания родителя:
-                          <input
-                            value={parentAddress}
-                            onChange={(e) => setParentAddress(e.target.value)}
-                          />
-                        </label>
-                      </>
-                    )}
-                  </>
-                )}
-  
-                {documentType === "birthCert" && (
-                  <>
-                    <label>
-                      Номер и серия свидетельства:
-                      <input
-                        value={birthCertNumber}
-                        onChange={(e) => setBirthCertNumber(e.target.value)}
-                        placeholder="III-AH №222222"
-                      />
-                    </label>
-                    <label>
-                      Дата выдачи:
-                      <input
-                        type="date"
-                        value={dateСertificate}
-                        onChange={handleChange}
-                        required
-                        min={getMinDate()}
-                        max={getMaxDate()}
-                        className={error ? "error" : ""}
-                      />
-                      {error && <div className="error-message">{error}</div>}
-                    </label>
-                    <label>
-                      Место гос. регистрации:
-                      <input
-                        value={passportAddress}
-                        onChange={(e) => setPassportAddress(e.target.value)}
-                      />
-                    </label>
-                    {notLivingByPassport && (
+                      )}
                       <label>
-                        Адрес фактического проживания:
+                        ФИО родителя:
                         <input
-                          value={customAddress}
-                          onChange={(e) => setCustomAddress(e.target.value)}
+                          value={parentFio}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // Разрешаем только русские буквы, пробелы и дефисы
+                            const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
+
+                            // Проверяем количество слов (не более 3)
+                            const wordCount = value
+                              .trim()
+                              .split(/\s+/)
+                              .filter(Boolean).length;
+
+                            if (
+                              onlyRussianLetters.test(value) &&
+                              wordCount <= 3
+                            ) {
+                              setParentFio(value);
+                            }
+                          }}
+                          onBlur={(e) => {
+                            // Автоматически форматируем при потере фокуса
+                            const formatted = e.target.value
+                              .trim()
+                              .replace(/\s+/g, " ") // Удаляем лишние пробелы
+                              .replace(
+                                /(^|\s)([а-яё])/g,
+                                (_, p1, p2) => p1 + p2.toUpperCase()
+                              ); // Делаем первые буквы заглавными
+
+                            setParentFio(formatted);
+                          }}
+                          required
+                          pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
+                          title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
+                          placeholder="Иванов Иван Иванович"
+                          maxLength={60} // Ограничение по длине
                         />
                       </label>
-                    )}
-                    <label>
-                      ФИО родителя:
-                      <input
-                        value={parentFio}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          // Разрешаем только русские буквы, пробелы и дефисы
-                          const onlyRussianLetters = /^[А-ЯЁа-яё\s-]*$/;
-  
-                          // Проверяем количество слов (не более 3)
-                          const wordCount = value
-                            .trim()
-                            .split(/\s+/)
-                            .filter(Boolean).length;
-  
-                          if (onlyRussianLetters.test(value) && wordCount <= 3) {
-                            setParentFio(value);
+                      <label>
+                        Номер телефона родителя:
+                        <input
+                          type="tel"
+                          value={parentPhone}
+                          onChange={handleParentPhoneChange}
+                          placeholder="+7 (___) ___-__-__"
+                          maxLength={18}
+                          className={parentPhoneError ? "error" : ""}
+                        />
+                        {parentPhoneError && (
+                          <div className="error-message">
+                            {parentPhoneError}
+                          </div>
+                        )}
+                      </label>
+                      <label>
+                        Электронная почта родителя:
+                        <input
+                          type="email"
+                          value={parentEmail}
+                          onChange={(e) =>
+                            handleEmailChange(
+                              e.target.value,
+                              setParentEmail,
+                              setParentEmailError
+                            )
                           }
-                        }}
-                        onBlur={(e) => {
-                          // Автоматически форматируем при потере фокуса
-                          const formatted = e.target.value
-                            .trim()
-                            .replace(/\s+/g, " ") // Удаляем лишние пробелы
-                            .replace(
-                              /(^|\s)([а-яё])/g,
-                              (_, p1, p2) => p1 + p2.toUpperCase()
-                            ); // Делаем первые буквы заглавными
-  
-                          setParentFio(formatted);
-                        }}
-                        required
-                        pattern="^[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?(?:\s[А-ЯЁ][а-яё]*(?:-[А-ЯЁ][а-яё]*)?)?$"
-                        title="Введите ФИО полностью (3 слова) на русском языке. Каждое слово должно начинаться с заглавной буквы. Допускается дефис в словах."
-                        placeholder="Иванов Иван Иванович"
-                        maxLength={60} // Ограничение по длине
-                      />
-                    </label>
-                    <label>
-                      Номер телефона родителя:
-                      <input
-                        type="tel"
-                        value={parentPhone}
-                        onChange={handleParentPhoneChange}
-                        placeholder="+7 (___) ___-__-__"
-                        maxLength={18}
-                        className={parentPhoneError ? "error" : ""}
-                      />
-                      {parentPhoneError && (
-                        <div className="error-message">{parentPhoneError}</div>
-                      )}
-                    </label>
-                    <label>
-                      Электронная почта родителя:
-                      <input
-                        type="email"
-                        value={parentEmail}
-                        onChange={(e) =>
-                          handleEmailChange(
-                            e.target.value,
-                            setParentEmail,
-                            setParentEmailError
-                          )
-                        }
-                        required
-                        placeholder="example@mail.com"
-                        className={parentEmailError ? "error" : ""}
-                      />
-                      {parentEmailError && (
-                        <div className="error-message">{parentEmailError}</div>
-                      )}
-                    </label>
-  
-                    <label>
-                      Серия и номер паспорта родителя:
-                      <input
-                        maxLength={11} // 10 цифр + 1 пробел
-                        value={parentPassport}
-                        placeholder="1234 123456"
-                        onChange={(e) => {
-                          const onlyDigits = e.target.value
-                            .replace(/\D/g, "")
-                            .slice(0, 10);
-                          const formatted =
-                            onlyDigits.length > 4
-                              ? `${onlyDigits.slice(0, 4)} ${onlyDigits.slice(4)}`
-                              : onlyDigits;
-  
-                          setParentPassport(formatted);
-                        }}
-                      />
-                    </label>
-  
-                    <label>
-                      Кем и когда выдан паспорт:
-                      <input
-                        value={parentIssuedBy}
-                        onChange={(e) => setParentIssuedBy(e.target.value)}
-                      />
-                    </label>
-                    <label>
-                      Адрес проживания родителя:
-                      <input
-                        value={parentAddress}
-                        onChange={(e) => setParentAddress(e.target.value)}
-                      />
-                    </label>
-                  </>
-                )}
+                          required
+                          placeholder="example@mail.com"
+                          className={parentEmailError ? "error" : ""}
+                        />
+                        {parentEmailError && (
+                          <div className="error-message">
+                            {parentEmailError}
+                          </div>
+                        )}
+                      </label>
+
+                      <label>
+                        Серия и номер паспорта родителя:
+                        <input
+                          maxLength={11} // 10 цифр + 1 пробел
+                          value={parentPassport}
+                          placeholder="1234 123456"
+                          onChange={(e) => {
+                            const onlyDigits = e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 10);
+                            const formatted =
+                              onlyDigits.length > 4
+                                ? `${onlyDigits.slice(0, 4)} ${onlyDigits.slice(
+                                    4
+                                  )}`
+                                : onlyDigits;
+
+                            setParentPassport(formatted);
+                          }}
+                        />
+                      </label>
+
+                      <label>
+                        Кем и когда выдан паспорт:
+                        <input
+                          value={parentIssuedBy}
+                          onChange={(e) => setParentIssuedBy(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Адрес проживания родителя:
+                        <input
+                          value={parentAddress}
+                          onChange={(e) => setParentAddress(e.target.value)}
+                        />
+                      </label>
+                    </>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className={styles.submitBtn}
+                >
+                  Назад
+                </button>
+
+                <button type="submit" className={styles.submitBtn}>
+                  Отправить
+                </button>
               </div>
-                <button type="button" onClick={handleBack} className={styles.submitBtn}>
-                    Назад
-                  </button>
-
-          <button type="submit" className={styles.submitBtn}>
-            Отправить
-          </button>
-            </div>
-            
-          )}
+            )}
           </div>
-
         </form>
-          <img className={styles.closeBtn} onClick={onClose} src="/images/exit.svg" alt="Закрыть" />
+        <img
+          className={styles.closeBtn}
+          onClick={onClose}
+          src="/images/exit.svg"
+          alt="Закрыть"
+        />
       </div>
     </div>
   );
