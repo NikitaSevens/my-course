@@ -724,15 +724,6 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                         />
                       </label>
                       <label>
-                        Адрес регистрации:
-                        <input
-                          value={passportAddress}
-                          onChange={handleChangeSearch} // Обработчик изменения
-                          className={styles.input}
-                          placeholder="Начните вводить адрес..."
-                        />
-                      </label>
-                      <label>
                         Место работы, учёбы:
                         <input
                           value={placeOfStudy}
@@ -741,6 +732,16 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                           maxLength={100}
                         />
                       </label>
+                      <label>
+                        Адрес регистрации:
+                        <input
+                          value={passportAddress}
+                          onChange={handleChangeSearch} // Обработчик изменения
+                          className={styles.input}
+                          placeholder="Начните вводить адрес..."
+                        />
+                      </label>
+                      
 
                       <div className={styles.suggestionsWrapper}>
                         {passportSuggestions.length > 0 && (
