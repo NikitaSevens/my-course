@@ -113,6 +113,30 @@
 }
 
 /* Адаптивность */
+@media (max-width: 2568px) {
+  .card {
+    width: 340px;
+    min-width: 340px;
+  }
+  
+  .imageContainer {
+    height: 200px;
+  }
+}
+/* Адаптивность */
+@media (max-width: 1468px) {
+  .card {
+    width: 280px;
+    min-width: 280px;
+  }
+  
+  .imageContainer {
+    height: 160px;
+  }
+}
+
+
+/* Адаптивность */
 @media (max-width: 768px) {
   .card {
     width: 240px;

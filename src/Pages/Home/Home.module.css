@@ -75,14 +75,16 @@
 
 /* Courses Section */
 .courses {
-  padding: 64px 32px;
+  padding: 32px 32px 64px 32px;
   background: white;
 }
 
 .courses h2 {
   text-align: center;
+  font-size: 2vw !important;
   font-size: 32px;
   margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 
@@ -135,9 +137,9 @@
 .reasons {
   display: flex;
   justify-content: space-around;
-
   text-align: center;
   gap: 40px;
+  margin-top: 150px;
 }
 
 .reasonItem {
@@ -222,6 +224,13 @@
   .reasonItem h2 strong {
     font-size: 4vw;
   }
+  .courses h2 {
+  text-align: center;
+  font-size: 3vw !important;
+  font-size: 32px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
 }
 
 @media (max-width: 768px) {
@@ -243,6 +252,13 @@
     justify-content: flex-end;
     flex-direction: column;
   }
+  .courses h2 {
+  text-align: center;
+  font-size: 5vw !important;
+  font-size: 32px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
   
   .floatingTags{
     display: none;

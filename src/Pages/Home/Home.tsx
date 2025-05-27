@@ -93,10 +93,6 @@ const Home = () => {
         </section>
 
 
-        <section id="about" className={styles.courses}>
-          <h2>О нас</h2>
-        </section>
-
 
         <section id="programs" className={styles.courses}>
           <h2>Программы</h2>

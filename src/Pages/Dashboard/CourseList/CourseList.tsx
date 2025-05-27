@@ -12,13 +12,20 @@ interface Course {
 const DashboardPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [filter, setFilter] = useState("Upcoming");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL + "/courses")
       .then((res) => res.json())
-      .then((data) => setCourses(data))
-      .catch((err) => console.error("Ошибка загрузки курсов", err));
+      .then((data) => {
+        setCourses(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Ошибка загрузки курсов", err);
+        setIsLoading(false);
+      });
   }, []);
 
   const today = new Date();
@@ -65,31 +72,40 @@ const DashboardPage = () => {
         </div>
 
         <div className={styles.courseGrid}>
-          {filteredCourses.map((course) => (
-            <div key={course.id} className={styles.courseCard}>
-              <h3>{course.title}</h3>
-              <p>
-                С {course.startDate} по {course.endDate}
-              </p>
-              <div className={styles.cardActions}>
-                <button
-                  onClick={() =>
-                    navigate(`/admin/create`, { state: { course } })
-                  }
-                  className={styles.editBtn}
-                >
-                  ✏️ Редактировать
-                </button>
-
-                <button
-                  onClick={() => handleDelete(course.id)}
-                  className={styles.deleteBtn}
-                >
-                  🗑 Удалить
-                </button>
+          {isLoading ? (
+            [...Array(3)].map((_, idx) => (
+              <div key={idx} className={`${styles.courseCard} ${styles.skeletonCard}`}>
+                <div className={styles.skeletonTitle}></div>
+                <div className={styles.skeletonText}></div>
+                <div className={styles.skeletonButtons}></div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            filteredCourses.map((course) => (
+              <div key={course.id} className={styles.courseCard}>
+                <h3>{course.title}</h3>
+                <p>
+                  С {course.startDate} по {course.endDate}
+                </p>
+                <div className={styles.cardActions}>
+                  <button
+                    onClick={() =>
+                      navigate(`/admin/create`, { state: { course } })
+                    }
+                    className={styles.editBtn}
+                  >
+                    ✏️ Редактировать
+                  </button>
+                  <button
+                    onClick={() => handleDelete(course.id)}
+                    className={styles.deleteBtn}
+                  >
+                    🗑 Удалить
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

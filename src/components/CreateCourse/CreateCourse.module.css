@@ -1,7 +1,7 @@
 .container {
 
   display: flex;
-  background: #f8f8f8;
+ 
 }
 
 .form {
@@ -9,7 +9,7 @@
   padding: 32px 24px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 100%;
+  width: 70%;
 
   display: flex;
   flex-direction: column;
@@ -35,6 +35,7 @@
 .field select {
   padding: 8px 12px;
   font-size: 14px;
+    background: #f3f3f3;
   border: 1px solid #ccc;
   border-radius: 6px;
 }

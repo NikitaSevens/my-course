@@ -2,7 +2,7 @@
 .container {
   display: flex;
   margin: 0 auto;
-  max-width: 100vh;
+  max-width: 130vh;
 }
 .main {
   flex: 1;
