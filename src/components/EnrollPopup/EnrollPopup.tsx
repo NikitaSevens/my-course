@@ -54,6 +54,7 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const [placeOfStudy, setPlaceOfStudy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [parentBirthCertNumber, setParentBirthCertNumber] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [adress, setAdress] = useState("");
   const [errors, setErrors] = useState({
     series: "",
@@ -335,19 +336,19 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Валидация паспорта
+    if (isSubmitting) return; // не даём повторно кликнуть
+
+    setIsSubmitting(true); // начинаем загрузку
+
     const seriesError = validateSeries(docSeries);
     const numberError = validateNumber(docNumber);
 
     if (seriesError || numberError) {
-      setErrors({
-        series: seriesError,
-        number: numberError,
-      });
+      setErrors({ series: seriesError, number: numberError });
+      setIsSubmitting(false); // ❗ сбрасываем флаг, т.к. валидация не прошла
       return;
     }
 
-    // Собираем объект
     const newEnroll = {
       id: Date.now(),
       name,
@@ -378,7 +379,6 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
       parentBirthCertNumber,
     };
 
-    // Отправляем на сервер
     try {
       const response = await fetch(`${apiUrl}/send-doc`, {
         method: "POST",
@@ -392,19 +392,18 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
         throw new Error("Ошибка при отправке на сервер");
       }
 
-      // Сохраняем в localStorage
-      const storedEnrollments = localStorage.getItem("enrollments");
-      const enrollments = storedEnrollments
-        ? JSON.parse(storedEnrollments)
-        : [];
+      const stored = localStorage.getItem("enrollments");
+      const enrollments = stored ? JSON.parse(stored) : [];
       enrollments.push(newEnroll);
       localStorage.setItem("enrollments", JSON.stringify(enrollments));
 
-      alert("Вы успешно записались на курс! Документ отправлен на почту.");
+      alert("Вы успешно записались на курс!");
       onClose();
     } catch (error) {
       console.error(error);
       alert("Произошла ошибка при отправке данных на сервер.");
+    } finally {
+      setIsSubmitting(false); // загрузка завершена
     }
   };
 
@@ -503,7 +502,9 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
 
   return (
     <div className={styles.overlay}>
+      
       <div className={styles.popup}>
+        
         <h2>Запись на курс</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.form}>
@@ -741,7 +742,6 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                           placeholder="Начните вводить адрес..."
                         />
                       </label>
-                      
 
                       <div className={styles.suggestionsWrapper}>
                         {passportSuggestions.length > 0 && (
@@ -1123,8 +1123,12 @@ const EnrollPopup = ({ onClose, selectedCourse }: EnrollPopupProps) => {
                   Назад
                 </button>
 
-                <button type="submit" className={styles.submitBtn}>
-                  Отправить
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Отправка..." : "Отправить"}
                 </button>
               </div>
             )}

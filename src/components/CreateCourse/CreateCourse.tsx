@@ -31,6 +31,7 @@ const CreateCourse = () => {
   const [image, setImage] = useState(""); // ссылка
   const [imageFile, setImageFile] = useState<File | null>(null); // файл
   const [preview, setPreview] = useState<string | null>(null); // превью картинки
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,23 +41,22 @@ const CreateCourse = () => {
   const isEditing = Boolean(course);
 
   useEffect(() => {
-  const courseFromState = location.state?.course;
+    const courseFromState = location.state?.course;
 
-  if (courseFromState) {
-    setForm({
-      ...initialForm,
-      ...courseFromState,
-      programFile: null,
-    });
-    setImage(courseFromState.image || "");
-    setPreview(courseFromState.image || null);
-  } else {
-    setForm(initialForm);
-    setImage("");
-    setPreview(null);
-  }
-}, [location.state]);
-
+    if (courseFromState) {
+      setForm({
+        ...initialForm,
+        ...courseFromState,
+        programFile: null,
+      });
+      setImage(courseFromState.image || "");
+      setPreview(courseFromState.image || null);
+    } else {
+      setForm(initialForm);
+      setImage("");
+      setPreview(null);
+    }
+  }, [location.state]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -84,35 +84,31 @@ const CreateCourse = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (isSubmitting) return; // блокируем повтор
+
     if (!form.title || !form.startDate || !form.endDate) {
       setError("Пожалуйста, заполните обязательные поля");
       return;
     }
 
+    setIsSubmitting(true); // начинаем загрузку
+
     const courseData = new FormData();
 
-    // Добавляем обычные поля
     Object.entries(form).forEach(([key, value]) => {
       if (key !== "programFile" && key !== "image" && value) {
         courseData.append(key, value as string);
       }
     });
 
-    // Только одно изображение — либо файл, либо ссылка
     if (imageFile) {
       courseData.append("imageFile", imageFile);
     } else if (image) {
       courseData.append("image", image);
     }
 
-    // Программа (PDF/DOCX)
     if (form.programFile) {
       courseData.append("programFile", form.programFile);
-    }
-
-    // (Опционально) отладка
-    for (let pair of courseData.entries()) {
-      console.log(pair[0], pair[1]);
     }
 
     const url = course ? `${apiUrl}/courses/${course.id}` : `${apiUrl}/courses`;
@@ -124,7 +120,6 @@ const CreateCourse = () => {
     })
       .then(async (res) => {
         if (!res.ok) {
-          // Попытка получить текст ошибки
           const contentType = res.headers.get("content-type");
           const errorText = contentType?.includes("application/json")
             ? (await res.json()).error
@@ -145,11 +140,14 @@ const CreateCourse = () => {
         setPreview(null);
         setImage("");
         setError("");
-        (e.target as HTMLFormElement).reset(); // сброс файлов
+        (e.target as HTMLFormElement).reset();
       })
       .catch((err) => {
         console.error(err);
         setError(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false); // завершение загрузки
       });
   };
 
@@ -471,8 +469,14 @@ const CreateCourse = () => {
           </select>
         </label>
 
-        <button className={styles.submit} type="submit">
-          {isEditing ? "Сохранить курс" : "Создать курс"}
+        <button className={styles.submit} type="submit" disabled={isSubmitting}>
+          {isSubmitting
+            ? isEditing
+              ? "Сохраняю..."
+              : "Создаю..."
+            : isEditing
+            ? "Сохранить курс"
+            : "Создать курс"}
         </button>
       </form>
     </div>

@@ -7,11 +7,7 @@ import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { fileURLToPath } from "url";
 import multer from "multer";
-import {
-  S3Client,
-  GetObjectCommand,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import {S3Client,GetObjectCommand,PutObjectCommand,} from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { generateDocxFromTemplate } from "./utils/generateDocxFromTemplate.js";
 
