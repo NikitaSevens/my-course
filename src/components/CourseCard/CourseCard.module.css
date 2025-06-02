@@ -143,6 +143,10 @@
     min-width: 240px;
   }
   
+  .formatBadge {
+    max-width: 200px;
+    font-size: 11px;
+  }
   .imageContainer {
     height: 140px;
   }

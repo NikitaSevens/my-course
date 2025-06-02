@@ -41,6 +41,7 @@
 .row {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .row .field {
@@ -78,8 +79,8 @@
 }
 
 .uploadBox {
-  width: 300px;
-  height: 300px;
+  width: 10vw;
+  height: 10vw;
   background: #f3f3f3;
   border: 2px dashed #ccc;
   border-radius: 10px;
