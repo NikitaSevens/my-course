@@ -8,6 +8,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  color: rgb(0, 0, 0);
 }
 
 .popup {
@@ -22,6 +23,7 @@
   font-family: 'Segoe UI', sans-serif;
   flex-direction: row;
   margin:  auto 20px;
+  color: #000000;
 }
 
 .scrollOne{
